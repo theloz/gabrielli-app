@@ -52,7 +52,8 @@ $$(document).on('deviceready', function() {
 myApp.onPageInit('about', function (page) {
     // Do something here for "about" page
     //myApp.alert('geeno');
-    $$('#gg-title').hide();
+    //
+    //$$('#gg-title').hide();
 })
 myApp.onPageInit('login', function (page) {
     // Do something here for "about" page
@@ -72,7 +73,11 @@ myApp.onPageInit('rest', function (page){
     });
 
 })
-
+myApp.onPageInit('table', function (page) {
+    // Do something here for "about" page
+    //myApp.alert('geeno');
+    //$$('#gg-title').hide();
+})
 // Option 2. Using one 'pageInit' event handler for all pages:
 $$(document).on('pageInit', function (e) {
     // Get page data from event data
@@ -81,7 +86,7 @@ $$(document).on('pageInit', function (e) {
     if (page.name === 'about') {
         // Following code will be executed for page with data-page attribute equal to "about"
         //myApp.alert('Here comes About page');
-        myApp.showPreloader();
+//        myApp.showPreloader();
     }
 })
 
