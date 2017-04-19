@@ -12,8 +12,7 @@ var mainView = myApp.addView('.view-main', {
 });
 
 // Handle Cordova Device Ready Event
-$$(document).on('deviceready', function() {
-    console.log("Device is ready!");
+$$(document).on('deviceready', function () {
 });
 
 
@@ -49,50 +48,72 @@ $$(document).on('deviceready', function() {
 //    });
 //}).trigger();
 // Option 1. Using page callback for page (for "about" page in this case) (recommended way):
-myApp.onPageInit('about', function (page) {
-    // Do something here for "about" page
-    //myApp.alert('geeno');
-    //
-    //$$('#gg-title').hide();
-})
-myApp.onPageInit('login', function (page) {
-    // Do something here for "about" page
-    //myApp.alert('geeno');
-    //$$('#gg-title').hide();
-})
-myApp.onPageInit('rest', function (page){
+myApp.onPageInit('rest', function (page) {
     //myApp.alert("rest page here");
     /*$$.getJSON('http://ergast.com/api/f1/constructors/renault/constructorStandings/1/seasons.json', function (json) {
-        //console.log(json);
-        $$('#restcontainer').html(json);
-    });*/
-    $$('#gg-title').hide();
-    $$.get('http://ergast.com/api/f1/constructors/renault/constructorStandings/1/seasons.json', {id: 3}, function (data) {
-        //console.log(data);
-        $$('#restcontainer').html(data);
-    });
-
-})
-myApp.onPageInit('table', function (page) {
-    // Do something here for "about" page
-    //myApp.alert('geeno');
+     //console.log(json);
+     $$('#restcontainer').html(json);
+     });*/
     //$$('#gg-title').hide();
+//    $$.get('http://ergast.com/api/f1/constructors/renault/constructorStandings/1/seasons.json', {id: 3}, function (data) {
+//        //console.log(data);
+//        $$('#restcontainer').html(data);
+//    });
+
 })
 // Option 2. Using one 'pageInit' event handler for all pages:
 $$(document).on('pageInit', function (e) {
     // Get page data from event data
     var page = e.detail.page;
+    var mainView = myApp.addView(".view-main");
 
-    if (page.name === 'about') {
+
+    $$("#btn-logout").click(function () {
+        window.sessionStorage.clear();
+        mainView.router.loadPage("login.html");
+        console.log("Distroy all!!!");
+    });
+    //Pagina di Login
+    if (page.name === 'login') {
+        //Press Login button
+        $$("#btn-login").click(function () {
+            //Get Form Login
+            var formLogin = myApp.formGetData('frm-login');
+            //If user match
+            if (formLogin.username === "asd") {
+                //Set user in session
+                window.sessionStorage.setItem("username", formLogin.username);
+                //Set token auth
+                window.sessionStorage.setItem("authorized", 1);
+                //Authorized
+                mainView.router.loadPage("index.html");
+
+                console.log("Welcome!");
+            } else {
+                //not Authorized and must login
+                mainView.router.loadPage("login.html");
+
+                console.log("Try again!!");
+            }
+        });
         // Following code will be executed for page with data-page attribute equal to "about"
         //myApp.alert('Here comes About page');
 //        myApp.showPreloader();
+    } else {
+        //Check if user is logged in retrieving user from session 
+        if (window.sessionStorage.authorized != 1) {
+            mainView.router.loadPage("login.html");
+            console.log("Not logged in!!");
+        } else {
+
+            console.log("Logged in!!");
+        }
     }
 })
 
 // Option 2. Using live 'pageInit' event handlers for each page
-$$(document).on('pageInit', '.page[data-page="about"]', function (e) {
-    // Following code will be executed for page with data-page attribute equal to "about"
-    //myApp.alert('Here comes About page');
-})
+//$$(document).on('pageInit', '.page[data-page="about"]', function (e) {
+//    // Following code will be executed for page with data-page attribute equal to "about"
+//    //myApp.alert('Here comes About page');
+//})
 

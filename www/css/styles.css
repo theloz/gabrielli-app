@@ -13,3 +13,21 @@
 .statusbar-overlay {
     background: #000000;
 }
+/*-------------------------------
+            Index
+-------------------------------*/
+#img-logo{
+    position: relative;
+    top: 8px;
+    height: 56px;
+}
+#box-welcome{
+    text-align: center;
+    font-size: 16px;
+}
+
+
+
+.btn-spacer{
+    margin: 5px;
+}
