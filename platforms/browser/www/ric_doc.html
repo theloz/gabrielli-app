@@ -1,10 +1,28 @@
 <!-- We don't need a full layout in this file because this page will be parsed with Ajax. -->
+ <div class="navbar">
+            <div class="navbar-inner">
+                <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
+                <div class="left">
+                    <a href="#" class="back link"><i class="icon icon-back"></i></a>
+                </div>
+                <div class="center sliding left">
+                    <img id="img-logo" src="public/img/logo.jpg" />
+                </div>
+                <div class="right">
+                    <!--
+                      Right link contains only icon - additional "icon-only" class
+                      Additional "open-panel" class tells app to open panel when we click on this link
+                    -->
+                    <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                    
+                </div>
+            </div>
+        </div>
 <div class="pages">
-    <div data-page="about" class="page">
+    <div data-page="ric_doc" class="page">
         <div class="page-content">
             <div class="content-block">
-                <p>Here is About page!</p>
-                <p>Fusce eros lectus, accumsan eget mi vel, iaculis tincidunt felis. Nulla tincidunt pharetra sagittis. Fusce in felis eros. Nulla sit amet aliquam lorem, et gravida ipsum. Mauris consectetur nisl non sollicitudin tristique. Praesent vitae metus ac quam rhoncus mattis vel et nisi. Aenean aliquet, felis quis dignissim iaculis, lectus quam tincidunt ligula, et venenatis turpis risus sed lorem. Morbi eu metus elit. Ut vel diam dolor.</p>
+                Richiesta documento
             </div>
         </div>
     </div>

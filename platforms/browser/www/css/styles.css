@@ -31,3 +31,12 @@
 .btn-spacer{
     margin: 5px;
 }
+/*SIDE PANEL, DA TESTARE QUESTO OVERRIDE*/
+body.with-panel-left-reveal .panel-overlay {
+    -webkit-transform: initial;
+    transform: initial;
+}
+.btn-logout-sidePanel{
+    margin: 20px 0px;
+    
+}

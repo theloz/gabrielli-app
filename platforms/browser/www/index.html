@@ -21,7 +21,7 @@
         <meta name="msapplication-tap-highlight" content="no">
 
         <!-- Your app title -->
-        <title>My App</title>
+        <title>Gabrielli App</title>
 
         <!-- This template defaults to the iOS CSS theme. To support both iOS and material design themes, see the Framework7 Tutorial at the link below:
             http://www.idangero.us/framework7/tutorials/maintain-both-ios-and-material-themes-in-single-app.html
@@ -32,42 +32,72 @@
         <link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">
         <link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">
         <link rel="stylesheet" href="lib/framework7/css/framework7-icons.css">
+        <link rel="stylesheet" href="css/table.css">
         <link rel="stylesheet" href="css/themeStyle.css">
         <link rel="stylesheet" href="css/styles.css">
     </head>
 
     <body class="theme-brown">
         <!-- Status bar overlay for full screen mode (PhoneGap) -->
-        <div class="statusbar-overlay"></div>
+
 
         <!-- Panels overlay-->
         <div class="panel-overlay"></div>
         <!-- Left panel with reveal effect-->
-        <div class="panel panel-left panel-reveal">
-            <div class="content-block">
-                <p>Left panel content goes here</p>
-                <p>some sample</p>
-                <p><a href="rest.html">Restful test</a></p>
-                <p><a href="#"><i class="icon f7-icons" id="btn-logout">logout</i></a></p>
-            </div>
-        </div>
-        <div class="navbar">
-            <div class="navbar-inner">
-                <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-                <div class="left">
-                    <a href="#" class="back link"><i class="icon icon-back"></i></a>
-                </div>
-                <div class="center sliding left">
-                    <img id="img-logo" src="public/img/logo.jpg" />
-                </div>
-
-                <div class="right">
-                    <!--
-                      Right link contains only icon - additional "icon-only" class
-                      Additional "open-panel" class tells app to open panel when we click on this link
-                    -->
-                    <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                </div>
+        <div class="panel panel-left panel-reveal ">
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="rest.html" class="close-panel">Restful test</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="index.html" class="close-panel">Landing page</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="manage_ticket.html" class="close-panel">Gestione Ticket</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="ric_doc.html" class="close-panel">Richiesta intervento IT</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="ric_int_dte.html" class="close-panel">Richiesta intervento DTE</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="ric_int_it.html" class="close-panel">Richiesta Documenti</a></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <p><a href="dataTable.html" class="close-panel">Test Tabella</a></p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <a href="#" class="button button-fill button-big button-raised color-amber btn-spacer close-panel btn-logout-sidePanel" id="btn-logout">LOGOUT</a>
             </div>
         </div>
         <!-- Views -->
@@ -75,7 +105,25 @@
             <!-- Your main view, should have "view-main" class -->
             <div class="view view-main theme-brown">
                 <!-- Top Navbar-->
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
+                        <div class="left">
+                            <a href="#" class="back link"><i class="icon icon-back"></i></a>
+                        </div>
+                        <div class="center sliding left">
+                            <img id="img-logo" src="public/img/logo.jpg" />
+                        </div>
+                        <div class="right">
+                            <!--
+                              Right link contains only icon - additional "icon-only" class
+                              Additional "open-panel" class tells app to open panel when we click on this link
+                            -->
+                            <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
 
+                        </div>
+                    </div>
+                </div>
                 <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
                 <div class="pages navbar-through toolbar-through">
                     <!-- Page, "data-page" contains page name -->
@@ -83,7 +131,7 @@
                         <!-- Scrollable page content -->
                         <div class="page-content">
                             <div class="content-block">
-                                <div id="box-welcome">Benvenuto Mario Rossi</div>
+                                <div id="box-welcome"></div>
                                 <p>
                                     <a class="button button-fill button-big button-raised color-amber btn-spacer" href="login.html">Login</a>
                                 </p>
@@ -98,6 +146,9 @@
                                 </p>
                                 <p>
                                     <a class="button button-fill button-big button-raised color-amber btn-spacer" href="ric_doc.html">Richiesta Documenti</a>
+                                </p>
+                                <p>
+                                    <a class="button button-fill button-big button-raised color-amber btn-spacer" href="dataTable.html">Test Tabella</a>
                                 </p>
                             </div>
                         </div>
