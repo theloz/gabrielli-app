@@ -10,7 +10,13 @@
                 * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                     * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta 
+            http-equiv="Content-Security-Policy" 
+            content="
+            default-src 'self' http://gabrielli-test.afbnet.it
+            data: 
+            gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"
+            >
 
         <!-- Required meta tags-->
         <meta charset="utf-8">
@@ -53,7 +59,7 @@
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">
-                                <p><a href="index.html" class="close-panel">Landing page</a></p>
+                                <p><a href="home.html" class="close-panel">Landing page</a></p>
                             </div>
                         </div>
                     </li>
@@ -135,6 +141,7 @@
                 -->
             </div>
         </div>
+        <script type="text/javascript" src="lib/framework7/js/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
         <script type="text/javascript" src="js/my-app.js"></script>
     </body>

@@ -19,7 +19,11 @@ mainView.router.load({
         username: window.sessionStorage.username,
     }
 });
-
+$$.ajaxSetup({
+    headers: {
+        'Access-Control-Allow-Origin': '*'
+    }
+})
 
 /*-----------------
  Every pages
@@ -69,6 +73,56 @@ myApp.onPageInit('login', function (page) {
     });
 }).trigger();
 
+
+//Data Table
+myApp.onPageInit('dataTable', function (page) {
+    $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/list', function (json) {
+        buildHtmlTable(json);
+    });
+//    $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/list', function (json) {
+//        buildHtmlTable(json);
+//    });
+//    var myList = [{"name": "elia", "age": 50, "hobby": "tennis"},{"name": "tobia", "age": "25", "hobby": "swimming"},{"name": "ciaone","age": 10, "hobby": "programming"}];
+//   buildHtmlTable(myList);
+
+
+});
+
+function buildHtmlTable(myList) {
+    var columns = addAllColumnHeaders(myList);
+
+    for (var i = 0; i < myList.length; i++) {
+        var row$ = $$('<tr/>');
+        for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+            var cellValue = myList[i][columns[colIndex]];
+
+            if (cellValue === null) {
+                cellValue = "";
+            }
+
+            row$.append($$('<td/>').html(cellValue));
+        }
+        $$(".data-table > table tbody").append(row$);
+    }
+}
+function addAllColumnHeaders(myList)
+{
+    var columnSet = [];
+    var headerTr$ = $$('<tr/>');
+
+    for (var i = 0; i < myList.length; i++) {
+        var rowHash = myList[i];
+        for (var key in rowHash) {
+            if ($.inArray(key, columnSet) === -1) {
+                columnSet.push(key);
+                headerTr$.append($$('<th/>').html(key));
+            }
+        }
+    }
+    $$(".data-table > table > thead").append(headerTr$);
+
+    return columnSet;
+}
 // Option 1. Using page callback for page (for "about" page in this case) (recommended way):
 myApp.onPageInit('rest', function (page) {
     //myApp.alert("rest page here");
