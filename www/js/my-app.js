@@ -60,54 +60,56 @@ myApp.onPageInit('rest', function (page) {
 //        $$('#restcontainer').html(data);
 //    });
 
-})
+});
+
+myApp.onPageInit('index', function(page){
+    if(window.sessionStorage.username != ""){
+        $$("#box-welcome").html("Benvenuto "+window.sessionStorage.username);
+    }
+});
+
+myApp.onPageInit('login', function (page) {
+    //Press Login button
+    $$("#btn-login").click(function () {
+        //Get Form Login
+        var formLogin = myApp.formGetData('frm-login');
+        //If user match
+        if (formLogin.username === "asd") {
+            //Set user in session
+            window.sessionStorage.setItem("username", formLogin.username);
+            //Set token auth
+            window.sessionStorage.setItem("authorized", 1);
+            //Authorized
+            mainView.router.back();
+
+            console.log("Welcome!");
+        } else {
+            //not Authorized and must login
+            mainView.router.loadPage("login.html");
+
+            console.log("Try again!!");
+        }
+    });
+});
+
 // Option 2. Using one 'pageInit' event handler for all pages:
 $$(document).on('pageInit', function (e) {
     // Get page data from event data
     var page = e.detail.page;
     var mainView = myApp.addView(".view-main");
 
-
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
         mainView.router.loadPage("login.html");
         console.log("Distroy all!!!");
     });
-    //Pagina di Login
-    if (page.name === 'login') {
-        //Press Login button
-        $$("#btn-login").click(function () {
-            //Get Form Login
-            var formLogin = myApp.formGetData('frm-login');
-            //If user match
-            if (formLogin.username === "asd") {
-                //Set user in session
-                window.sessionStorage.setItem("username", formLogin.username);
-                //Set token auth
-                window.sessionStorage.setItem("authorized", 1);
-                //Authorized
-                mainView.router.loadPage("index.html");
-
-                console.log("Welcome!");
-            } else {
-                //not Authorized and must login
-                mainView.router.loadPage("login.html");
-
-                console.log("Try again!!");
-            }
-        });
-        // Following code will be executed for page with data-page attribute equal to "about"
-        //myApp.alert('Here comes About page');
-//        myApp.showPreloader();
-    } else {
+    //If page isn't 
+    if (page.name != 'login') {
         //Check if user is logged in retrieving user from session 
         if (window.sessionStorage.authorized != 1) {
             mainView.router.loadPage("login.html");
             console.log("Not logged in!!");
-        } else {
-
-            console.log("Logged in!!");
-        }
+        } 
     }
 })
 
