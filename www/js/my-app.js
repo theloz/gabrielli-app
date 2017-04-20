@@ -5,7 +5,6 @@ var myApp = new Framework7({
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
-
 // Add view
 var mainView = myApp.addView('.view-main', {
     // Because we want to use dynamic navbar, we need to enable it for this view:
@@ -30,48 +29,45 @@ $$.ajaxSetup({
  -----------------*/
 //Before Init
 myApp.onPageBeforeInit('*', function (page) {
-    var mainView = myApp.addView(".view-main");
-    if (page.name != 'login') {
-        //Check if user is logged in retrieving user from session 
-        if (window.sessionStorage.authorized != 1) {
-            mainView.router.loadPage("login.html");
-        }
+    console.log("page: "+page.name);
+    //Check if user is logged in retrieving user from session 
+    if (window.sessionStorage.authorized != 1) {
+        //mainView.router.loadPage("login.html");
+        myApp.loginScreen(".login-screen", false);
+    } else {
+        myApp.closeModal(".login-screen", false);
     }
 });
 
 $$("#btn-logout").click(function () {
-    console.log("btn logout");
+    console.log("logout");
     window.sessionStorage.clear();
-    mainView.router.loadPage("login.html");
+    myApp.loginScreen(".login-screen", false);
+    console.log("logout2");
 });
 
+//Login Button
+$$("#btn-login").click(function () {
+    //Get Form Login
+    var formLogin = myApp.formGetData('frm-login');
+    if (formLogin.username === "asd") {
+        window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+        window.sessionStorage.setItem("authorized", 1);                 //Set token auth
+        myApp.closeModal(".login-screen", false);                              //Close login screen
+    }
+});
 /*-----------------
  Single pages
  -----------------*/
-//Login Page
-myApp.onPageInit('login', function (page) {
-    //Press Login button
-    $$("#btn-login").click(function () {
-        //Get Form Login
-        var formLogin = myApp.formGetData('frm-login');
-        //If user match
-        if (formLogin.username === "asd") {
-            //Set user in session
-            window.sessionStorage.setItem("username", formLogin.username);
-            //Set token auth
-            window.sessionStorage.setItem("authorized", 1);
-            //Authorized
-            mainView.router.back();
 
-            console.log("Welcome!");
-        } else {
-            //not Authorized and must login
-            mainView.router.loadPage("login.html");
 
-            console.log("Try again!!");
-        }
-    });
-}).trigger();
+
+
+
+
+
+
+
 
 
 //Data Table
