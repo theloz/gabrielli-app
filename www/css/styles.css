@@ -34,3 +34,9 @@
     margin: 20px 0px;
     
 }
+
+.data-table tbody td {
+    height: auto;
+    min-height: 48px;
+
+}

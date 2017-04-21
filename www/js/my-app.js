@@ -60,16 +60,6 @@ $$("#btn-login").click(function () {
  Single pages
  -----------------*/
 
-
-
-
-
-
-
-
-
-
-
 //Data Table
 myApp.onPageInit('dataTable', function (page) {
     $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/list', function (json) {
@@ -81,6 +71,16 @@ myApp.onPageInit('dataTable', function (page) {
 //    var myList = [{"name": "elia", "age": 50, "hobby": "tennis"},{"name": "tobia", "age": "25", "hobby": "swimming"},{"name": "ciaone","age": 10, "hobby": "programming"}];
 //   buildHtmlTable(myList);
 
+});
+
+//TicketPage 
+myApp.onPageInit('ticketPage', function (page) {
+    var ticketId = page.query.id;
+    $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/oneticket?id='+ticketId+'', function (json) {
+        $$("#testRest").html(JSON.stringify(json));
+    });
+
+
 
 });
 
@@ -88,6 +88,7 @@ function buildHtmlTable(myList) {
     var columns = addAllColumnHeaders(myList);
 
     for (var i = 0; i < myList.length; i++) {
+//        var link$ = $$('<a href="home.html?id='+ myList[i][columns[0]] +'"/>');
         var row$ = $$('<tr/>');
         for (var colIndex = 0; colIndex < columns.length; colIndex++) {
             var cellValue = myList[i][columns[colIndex]];
@@ -95,12 +96,16 @@ function buildHtmlTable(myList) {
             if (cellValue === null) {
                 cellValue = "";
             }
-
-            row$.append($$('<td/>').html(cellValue));
+            //row$.append(link$);
+            row$.append($$('<td data-collapsible-title="'+[columns[colIndex]]+'"/>').html('<a href="ticketPage.html?id='+ myList[i][columns[0]] +'">' + cellValue + '</a>'));
         }
+        //var def$ = link$.append(row$);
         $$(".data-table > table tbody").append(row$);
     }
 }
+
+
+
 function addAllColumnHeaders(myList)
 {
     var columnSet = [];
