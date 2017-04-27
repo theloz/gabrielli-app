@@ -1,23 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!--
-            Customize this policy to fit your own app's needs. For more guidance, see:
-                https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-            Some notes:
-                * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-                * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-                * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                    * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta 
-            http-equiv="Content-Security-Policy" 
-            content="
-            default-src 'self' http://gabrielli-test.afbnet.it
-            data: 
-            gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"
-            >
-
+        <meta http-equiv="Content-Security-Policy" content=" default-src 'self' http://192.168.3.9 data:  gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
         <!-- Required meta tags-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
@@ -25,13 +9,9 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <!-- Your app title -->
         <title>Gabrielli App</title>
-        <!-- This template defaults to the iOS CSS theme. To support both iOS and material design themes, see the Framework7 Tutorial at the link below:
-            http://www.idangero.us/framework7/tutorials/maintain-both-ios-and-material-themes-in-single-app.html
-        -->
-        <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
-        <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
+        <!-- CSS -->
+
         <link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">
         <link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">
         <link rel="stylesheet" href="lib/framework7/css/framework7-icons.css">
@@ -39,8 +19,7 @@
         <link rel="stylesheet" href="css/themeStyle.css">
         <link rel="stylesheet" href="css/styles.css">
     </head>
-    <body class="theme-brown ">
-        <!-- Status bar overlay for full screen mode (PhoneGap) -->
+    <body class="theme-brown">
         <!-- Panels overlay-->
         <div class="panel-overlay"></div>
         <!-- Left panel with reveal effect-->
@@ -50,14 +29,7 @@
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">
-                                <p><a href="rest.html" class="close-panel">Restful test</a></p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">
-                                <p><a href="home.html" class="close-panel">Landing page</a></p>
+                                <p><a href="index.html" class="close-panel">Home</a></p>
                             </div>
                         </div>
                     </li>
@@ -89,43 +61,33 @@
                             </div>
                         </div>
                     </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">
-                                <p><a href="dataTable.html" class="close-panel">Test Tabella</a></p>
-                            </div>
-                        </div>
-                    </li>
                 </ul>
                 <a href="#" class="button button-fill button-big button-raised color-amber btn-spacer close-panel btn-logout-sidePanel" id="btn-logout">LOGOUT</a>
             </div>
         </div>
         <!-- Views -->
         <div class="views">
-            <!-- Your main view, should have "view-main" class -->
-            <div class="view view-main theme-brown ">
+            <div class="view view-main theme-brown">
                 <!-- Top Navbar-->
                 <div class="navbar">
                     <div class="navbar-inner">
-                        <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-                        <div class="left">
-                            <a href="#" class="back link"><i class="icon icon-back"></i></a>
-                        </div>
-                        <div class="center sliding left">
-                            <img id="img-logo" src="public/img/logo.jpg" />
-                        </div>
-                        <div class="right">
-                            <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                        </div>
+                        <div class="center"><img id="img-logo" src="public/img/logo.jpg" /></div>
+                        <div class="right"><a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a></div>
                     </div>
                 </div>
                 <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
                 <div class="pages navbar-through toolbar-through">
-                    <!-- Page, "data-page" contains page name -->
                     <div data-page="index" class="page">
-                        <!-- Scrollable page content -->
                         <div class="page-content">
-                            <div class="content-block"></div>
+                            <div class="content-block">
+                                <div id="box-welcome"></div>
+                                <p><a class="button button-fill button-big button-raised color-amber btn-spacer" href="manage_ticket.html">Gestione Ticket / Richiesta Materiale</a></p>
+                                <p><a class="button button-fill button-big button-raised color-amber btn-spacer" href="ric_int_it.html">Richiesta Intervento IT</a></p>
+                                <p><a class="button button-fill button-big button-raised color-amber btn-spacer" href="ric_int_dte.html">Richiesta Intervento DTE</a></p>
+                                <p><a class="button button-fill button-big button-raised color-amber btn-spacer" href="ric_doc.html">Richiesta Documenti</a></p>
+
+                                <br><p><a class="button button-fill button-big button-raised color-amber btn-spacer" href="ticket/new_tkt.html">New</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,15 +99,12 @@
                 <!-- Top Navbar-->
                 <div class="navbar">
                     <div class="navbar-inner">
-                        <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-                        <div class="left">
-                            <img id="img-logo" src="public/img/logo.jpg" />
-                        </div>
+                        <div class="center"><img id="img-logo" src="public/img/logo.jpg" /></div>
                     </div>
                 </div>
                 <div class="page">
                     <!-- page-content has additional login-screen content -->
-                    <div class="page-content login-screen-content">
+                    <div class="page-content login-screen-content ">
                         <div class="login-screen-title">&nbsp;</div>
                         <!-- Login form -->
                         <form id="frm-login"  class="list-block store-data">
@@ -173,14 +132,16 @@
                         <div class="content-block">
                             <div class="content-block">
                                 <a href="#" id="btn-login" class="button button-fill button-big button-raised color-amber btn-spacer">Conferma</a>
+                                <a href="#" id="btn-test" class="button button-fill button-big button-raised color-amber btn-spacer">TEST</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="lib/framework7/js/framework7.js"></script>
         <script type="text/javascript" src="lib/framework7/js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="lib/framework7/js/framework7.js"></script>
+        <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/my-app.js"></script>
     </body>
 

@@ -1,0 +1,71 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link"><i class="icon f7-icons">chevron_left</i></a></div>
+        <div class="center"><div class="item-media"><img id="img-logo" src="public/img/logo.jpg" /></div></div>
+        <div class="right"><a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a></div>
+    </div>
+</div>
+<div class="pages">
+    <div data-page="new_tkt" class="page navbar-through">
+        <div class="page-content">
+            <div class="content-block">
+                <form id="frm-new-ticket" class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">Titolo</div>
+                                    <div class="item-input">
+                                        <input type="text" name="title" placeholder="Titolo"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">Dettagli</div>
+                                    <div class="item-input">
+                                        <input type="text" name="dettagli" placeholder="Inserisci i dettagli..."/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">Fornitore</div>
+                                    <div class="item-input">
+                                        <select>
+                                            <option>Fornitore 1</option>
+                                            <option>Fornitore 2</option>
+                                            <option>Fornitore 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <label class="label-radio item-content">
+                                <input type="radio" name="status" value="parzialmente_completata" checked>
+                                <div class="item-media"><i class="icon icon-form-radio"></i></div>
+                                <div class="item-inner"><div class="item-title">Parzialmente completata</div></div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="label-radio item-content">
+                                <input type="radio" name="status" value="completata">
+                                <div class="item-media"><i class="icon icon-form-radio"></i></div>
+                                <div class="item-inner"><div class="item-title">Completata</div></div>
+                            </label>
+                        </li>
+                    </ul>
+                </form>
+                <div class="row">
+                    <a href="#" id="btn-new-ticket" class="button button-fill button-big button-raised color-amber col-50">Conferma</a>
+                    <a href="#" class="back button button-fill button-big button-raised color-red col-50 icon f7-icons">trash_fill</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,33 +5,30 @@ var myApp = new Framework7({
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
+
+$$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
+
 // Add view
 var mainView = myApp.addView('.view-main', {
-    // Because we want to use dynamic navbar, we need to enable it for this view:
     dynamicNavbar: true,
 });
 
-//Preload landing page : home.html
-mainView.router.load({
-    url: 'home.html',
-    context: {
-        username: window.sessionStorage.username,
-    }
-});
-$$.ajaxSetup({
-    headers: {
-        'Access-Control-Allow-Origin': '*'
-    }
-})
+//Configuration for Infinite Scrolling
+var loading = false;
+var lastIndex;
+// Max items to load 
+var maxItems = 20;
+// Append items per load
+var itemsPerLoad = 10;
 
 /*-----------------
  Every pages
  -----------------*/
 //Before Init
+
 myApp.onPageBeforeInit('*', function (page) {
-    console.log("page: "+page.name);
     //Check if user is logged in retrieving user from session 
-    if (window.sessionStorage.authorized != 1) {
+    if (window.sessionStorage.authorized === "") {
         //mainView.router.loadPage("login.html");
         myApp.loginScreen(".login-screen", false);
     } else {
@@ -39,96 +36,125 @@ myApp.onPageBeforeInit('*', function (page) {
     }
 });
 
-$$("#btn-logout").click(function () {
-    console.log("logout");
-    window.sessionStorage.clear();
-    myApp.loginScreen(".login-screen", false);
-    console.log("logout2");
+//Init for every page
+myApp.onPageInit("*", function () {
+
 });
 
-//Login Button
-$$("#btn-login").click(function () {
-    //Get Form Login
-    var formLogin = myApp.formGetData('frm-login');
-    if (formLogin.username === "asd") {
-        window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
-        window.sessionStorage.setItem("authorized", 1);                 //Set token auth
-        myApp.closeModal(".login-screen", false);                              //Close login screen
-    }
-});
 /*-----------------
  Single pages
  -----------------*/
-
-
-
-
-
-
-
-
-
-
-
-//Data Table
-myApp.onPageInit('dataTable', function (page) {
-    $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/list', function (json) {
-        buildHtmlTable(json);
+//Index
+myApp.onPageInit('index', function () {
+    $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
+    $$("#btn-logout").click(function () {
+        window.sessionStorage.clear();
+        myApp.loginScreen(".login-screen", false);
     });
-//    $$.getJSON('http://gabrielli-test.afbnet.it/v1/ttm/list', function (json) {
+    //Login Button
+    $$("#btn-login").click(function () {
+        var formLogin = myApp.formGetData('frm-login');
+        //Get Form Login
+        if (formLogin.username === "asd") {
+            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
+            myApp.closeModal(".login-screen", false);                              //Close login screen
+        }
+    });
+    $$("#btn-test").click(function () {
+        $$.ajax({
+            headers: {Authorization: 'Bearer 102-token'},
+            url: 'http://192.168.3.9/v2/ttm/list',
+            error: function (data, status, xhr) {
+                alert(JSON.stringify(data));
+            },
+            success: function (data, status, xhr) {
+                alert("success");
+            },
+            statusCode: {
+                401: function (xhr) {
+                    alert('Non autorizzato');
+                }
+            }
+        });
+//        $$.getJSON('http://192.168.3.9/v2/ttm/list', function (data) {
+//            console.log("in function");
+//            console.log(JSON.stringify(data));
+//        });
+    });
+}).trigger();
+
+//Manage Ticket
+var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
+//    $$('.page-content').on('scroll', function () {
+//        console.log("scroll  "+$$(this).scrollTop()+" + h "+$$(this).height()+" + tableH "+$$(".data-table").height());
+//        if ($$(this).scrollTop() + $$(this).height() >= $$(".data-table").height()) {
+//            $$(".speed-dial").css("top","70px");
+//            $$(".speed-dial-buttons").css("bottom","5%");
+//        }else{
+//            $$(".speed-dial").css("top", "initial");
+//            $$(".speed-dial-buttons").css("bottom","100%");
+//            
+//        }
+//    });
+
+    //Pull to refresh
+    var ptrContent = $$('.pull-to-refresh-content');
+// Add 'refresh' listener on it
+    ptrContent.on('ptr:refresh', function (e) {
+        // Emulate 2s loading
+        setTimeout(function () {
+            // When loading done, we need to reset it
+            myApp.pullToRefreshDone();
+            manage_ticket.trigger();
+        }, 1000);
+    });
+
+//    $$.getJSON('http://192.168.3.9/v1/ttm/list', function (json) {
+//        //Table Construction
 //        buildHtmlTable(json);
 //    });
-//    var myList = [{"name": "elia", "age": 50, "hobby": "tennis"},{"name": "tobia", "age": "25", "hobby": "swimming"},{"name": "ciaone","age": 10, "hobby": "programming"}];
-//   buildHtmlTable(myList);
+    var myList = [];
+    for (var i = 1; i <= itemsPerLoad; i++) {
+        myList.push({"id": i, "titolo": "Ticket " + i});
+    }
+    buildHtmlTable(myList);
+    lastIndex = itemsPerLoad + 1;
+    $$('.infinite-scroll').on('infinite', function () {
+        // Exit, if loading in progress
+        if (loading)
+            return;
+        // Set loading flag
+        loading = true;
+        // Emulate 0.5s loading
+        setTimeout(function () {
+            // Reset loading flag
+            loading = false;
+            if (lastIndex >= maxItems) {
+                // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+                myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                // Remove preloader
+                $$('.infinite-scroll-preloader').remove();
+                return;
+            }
+            var newList = [];
+            for (var i = lastIndex; i < lastIndex + itemsPerLoad; i++) {
+                newList.push({"id": i, "titolo": "Ticket " + i});
+            }
+            buildHtmlTableBody(newList, ["id", "titolo"]);
+            lastIndex = lastIndex + itemsPerLoad;
+        }, 500);
+    });
 
 
+    $$(".ticket-info").click(function () {
+    });
 });
 
-function buildHtmlTable(myList) {
-    var columns = addAllColumnHeaders(myList);
-
-    for (var i = 0; i < myList.length; i++) {
-        var row$ = $$('<tr/>');
-        for (var colIndex = 0; colIndex < columns.length; colIndex++) {
-            var cellValue = myList[i][columns[colIndex]];
-
-            if (cellValue === null) {
-                cellValue = "";
-            }
-
-            row$.append($$('<td/>').html(cellValue));
-        }
-        $$(".data-table > table tbody").append(row$);
-    }
-}
-function addAllColumnHeaders(myList)
-{
-    var columnSet = [];
-    var headerTr$ = $$('<tr/>');
-
-    for (var i = 0; i < myList.length; i++) {
-        var rowHash = myList[i];
-        for (var key in rowHash) {
-            if ($.inArray(key, columnSet) === -1) {
-                columnSet.push(key);
-                headerTr$.append($$('<th/>').html(key));
-            }
-        }
-    }
-    $$(".data-table > table > thead").append(headerTr$);
-
-    return columnSet;
-}
-// Option 1. Using page callback for page (for "about" page in this case) (recommended way):
-myApp.onPageInit('rest', function (page) {
-    //myApp.alert("rest page here");
-    /*$$.getJSON('http://ergast.com/api/f1/constructors/renault/constructorStandings/1/seasons.json', function (json) {
-     //console.log(json);
-     $$('#restcontainer').html(json);
-     });*/
-    //$$('#gg-title').hide();
-//    $$.get('http://ergast.com/api/f1/constructors/renault/constructorStandings/1/seasons.json', {id: 3}, function (data) {
-//        //console.log(data);
-//        $$('#restcontainer').html(data);
-//    });
+//TicketPage 
+myApp.onPageInit('ticketPage', function (page) {
+    var ticketId = page.query.id;
+    $$.getJSON('http://192.168.3.9/v1/ttm/oneticket?id=' + ticketId + '', function (json) {
+        $$("#testRest").html(JSON.stringify(json));
+    });
 });
