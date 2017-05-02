@@ -63,11 +63,18 @@ myApp.onPageInit('index', function () {
     });
     $$("#btn-test").click(function () {
         $$.ajax({
-            headers: {Authorization: 'Bearer 102-token'},
-            url: 'http://192.168.3.9/v2/ttm/list',
-            error: function (data, status, xhr) {
-                alert(JSON.stringify(data));
+            headers: {
+                'Authorization': 'Bearer 102-token',
+                'Access-Control-Allow-Origin': '*',
+                'Content-type': 'multipart/form-data',
+                'dataType':'json',
             },
+            url: 'http://192.168.3.9/v2/ttm/list',
+            method: 'GET',
+            crossDomain: true,
+//            error: function (data, status, xhr) {
+//                alert(JSON.stringify(data));
+//            },
             success: function (data, status, xhr) {
                 alert("success");
             },
@@ -114,10 +121,22 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 //        //Table Construction
 //        buildHtmlTable(json);
 //    });
-    var myList = [];
-    for (var i = 1; i <= itemsPerLoad; i++) {
-        myList.push({"id": i, "titolo": "Ticket " + i});
-    }
+//    var myList = [];
+//    for (var i = 1; i <= itemsPerLoad; i++) {
+//        myList.push({"id": i, "titolo": "Ticket " + i});
+//    }
+    var filter = {
+        "stato":"aperto",
+        "titolo":"pippo",
+    };
+    var sort = {
+        "id" : "desc",
+    };
+    var myList = getTktDataByFilter('0','10', filter, sort);
+    console.log(myList);
+    //console.log(JSON.stringify(myList));
+    //myApp.alert(myList);
+    //return false;
     buildHtmlTable(myList);
     lastIndex = itemsPerLoad + 1;
     $$('.infinite-scroll').on('infinite', function () {
