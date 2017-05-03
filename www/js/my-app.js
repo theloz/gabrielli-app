@@ -1,15 +1,12 @@
 // Initialize app
-var myApp = new Framework7({
-    template7Pages: true,
-});
+var myApp = new Framework7({template7Pages: true,});
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
-
 //Configuration for Camera
 var pictureSource;
 var destinationType;
-var myPath;
+
 //Configuration for Infinite Scrolling
 var loading = false;
 var lastIndex;
@@ -19,11 +16,7 @@ var maxItems = 20;
 var itemsPerLoad = 10;
 
 $$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
-
-// Add view
-var mainView = myApp.addView('.view-main', {
-    dynamicNavbar: true,
-});
+var mainView = myApp.addView('.view-main', {dynamicNavbar: true,});
 
 $$(document).on('deviceready', function () {
     pictureSource = navigator.camera.PictureSourceType;
@@ -31,12 +24,11 @@ $$(document).on('deviceready', function () {
       //Necessarie per navigare il file system  
 //    myPath = cordova.file.externalRootDirectory;
 //    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
-
 });
 
-/*-----------------
- Every pages
- -----------------*/
+/*---------------------------------------
+              On ALL pages
+ ---------------------------------------*/
 //Before Init
 myApp.onPageBeforeInit('*', function (page) {
     //Check if user is logged in retrieving user from session 
@@ -51,11 +43,12 @@ myApp.onPageBeforeInit('*', function (page) {
 //Init for every page
 myApp.onPageInit("*", function () {});
 
-/*-----------------
- Single page
- -----------------*/
-//Index
-myApp.onPageInit('index', function () {
+/*---------------------------------------
+              On EACH page
+ ---------------------------------------*/
+
+//INDEX
+var index = myApp.onPageInit('index', function () {
     //In caso di refresh  elimina fa auto-login
     if (typeof window.sessionStorage.authorized !== 'undefined' &&
             window.sessionStorage.authorized !== null &&
@@ -81,7 +74,6 @@ myApp.onPageInit('index', function () {
         }
     });
     
-    
     $$("#btn-test").click(function () {
         $$.ajax({
             headers: {
@@ -105,7 +97,7 @@ myApp.onPageInit('index', function () {
     });
 }).trigger();
 
-//Manage Ticket
+//MANAGE TICKET
 var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 //    $$('.page-content').on('scroll', function () {
 //        console.log("scroll  "+$$(this).scrollTop()+" + h "+$$(this).height()+" + tableH "+$$(".data-table").height());
@@ -128,10 +120,12 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
         }, 1000);
     });
 
-    $$.getJSON('http://192.168.3.9/v1/ttm/list', function (json) {
-        //Table Construction
-        buildHtmlTable(json);
-    });
+    
+//    $$.getJSON('http://192.168.3.9/v1/ttm/list', function (json) {
+//        //Table Construction
+//        buildHtmlTable(json);
+//    });
+    
     var myList = [];
     for (var i = 1; i <= itemsPerLoad; i++) {
         myList.push({"id": i, "titolo": "Ticket " + i});
@@ -174,13 +168,12 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
             lastIndex = lastIndex + itemsPerLoad;
         }, 500);
     });
-
     $$(".ticket-info").click(function () {
     });
 });
 
-//New Ticket
-myApp.onPageInit("new_tkt", function () {
+//NEW TICKET
+var new_tkt = myApp.onPageInit("new_tkt", function () {
     $$("#btn-camera-upload").click(function () {
         capturePhotoWithData();
         //uploadFoto();
@@ -194,8 +187,8 @@ myApp.onPageInit("new_tkt", function () {
     });
 });
 
-//TicketPage 
-myApp.onPageInit('ticketPage', function (page) {
+//DETAIL TICKET 
+var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
     $$.getJSON('http://192.168.3.9/v1/ttm/oneticket?id=' + ticketId + '', function (json) {
         $$("#testRest").html(JSON.stringify(json));
@@ -237,3 +230,5 @@ myApp.onPageInit('ticketPage', function (page) {
 //function getFilepath(thefilepath) {
 //    alert(thefilepath);
 //}
+
+
