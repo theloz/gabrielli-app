@@ -6,12 +6,9 @@ var myApp = new Framework7({
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 
-$$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
-
-// Add view
-var mainView = myApp.addView('.view-main', {
-    dynamicNavbar: true,
-});
+//Configuration for Camera
+var pictureSource;
+var destinationType;
 
 //Configuration for Infinite Scrolling
 var loading = false;
@@ -21,15 +18,25 @@ var maxItems = 50;
 // Append items per load
 var itemsPerLoad = 10;
 
+$$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
+
+// Add view
+var mainView = myApp.addView('.view-main', {
+    dynamicNavbar: true,
+});
+
+$$(document).on('deviceready', function () {
+    pictureSource = navigator.camera.PictureSourceType.PHOTOLIBRARY;
+    destinationType = navigator.camera.DestinationType.DATA_URL;
+});
+
 /*-----------------
  Every pages
  -----------------*/
 //Before Init
-
 myApp.onPageBeforeInit('*', function (page) {
     //Check if user is logged in retrieving user from session 
     if (window.sessionStorage.authorized === "") {
-        //mainView.router.loadPage("login.html");
         myApp.loginScreen(".login-screen", false);
     } else {
         myApp.closeModal(".login-screen", false);
@@ -37,15 +44,21 @@ myApp.onPageBeforeInit('*', function (page) {
 });
 
 //Init for every page
-myApp.onPageInit("*", function () {
+myApp.onPageInit("*", function () {});
 
-});
 
 /*-----------------
- Single pages
+ Single page
  -----------------*/
 //Index
 myApp.onPageInit('index', function () {
+    //In caso di refresh  elimina fa auto-login
+    if (window.sessionStorage.authorized === "") {
+        myApp.loginScreen(".login-screen", false);
+    } else {
+        myApp.closeModal(".login-screen", false);
+    }
+
     $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
@@ -59,6 +72,7 @@ myApp.onPageInit('index', function () {
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             myApp.closeModal(".login-screen", false);                              //Close login screen
+            console.log("Logged!");
         }
     });
     $$("#btn-test").click(function () {
@@ -67,14 +81,11 @@ myApp.onPageInit('index', function () {
                 'Authorization': 'Bearer 102-token',
                 'Access-Control-Allow-Origin': '*',
                 'Content-type': 'multipart/form-data',
-                'dataType':'json',
+                'dataType': 'json',
             },
             url: 'http://192.168.3.9/v2/ttm/list',
             method: 'GET',
             crossDomain: true,
-//            error: function (data, status, xhr) {
-//                alert(JSON.stringify(data));
-//            },
             success: function (data, status, xhr) {
                 alert("success");
             },
@@ -84,27 +95,12 @@ myApp.onPageInit('index', function () {
                 }
             }
         });
-//        $$.getJSON('http://192.168.3.9/v2/ttm/list', function (data) {
-//            console.log("in function");
-//            console.log(JSON.stringify(data));
-//        });
     });
+
 }).trigger();
 
 //Manage Ticket
 var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
-//    $$('.page-content').on('scroll', function () {
-//        console.log("scroll  "+$$(this).scrollTop()+" + h "+$$(this).height()+" + tableH "+$$(".data-table").height());
-//        if ($$(this).scrollTop() + $$(this).height() >= $$(".data-table").height()) {
-//            $$(".speed-dial").css("top","70px");
-//            $$(".speed-dial-buttons").css("bottom","5%");
-//        }else{
-//            $$(".speed-dial").css("top", "initial");
-//            $$(".speed-dial-buttons").css("bottom","100%");
-//            
-//        }
-//    });
-
     //Pull to refresh
     var ptrContent = $$('.pull-to-refresh-content');
 // Add 'refresh' listener on it
@@ -117,14 +113,6 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
         }, 1000);
     });
 
-//    $$.getJSON('http://192.168.3.9/v1/ttm/list', function (json) {
-//        //Table Construction
-//        buildHtmlTable(json);
-//    });
-//    var myList = [];
-//    for (var i = 1; i <= itemsPerLoad; i++) {
-//        myList.push({"id": i, "titolo": "Ticket " + i});
-//    }
     var filter = {
         "stato":"aperto",
 //        "titolo":"pippo",
@@ -172,6 +160,22 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     });
 });
 
+function success() {}
+;
+function fail() {}
+;
+
+//New Ticket
+myApp.onPageInit("new_tkt", function () {
+    $$("#btn-camera-upload").click(function () {
+        capturePhotoWithData();
+        //uploadFoto();
+
+    });
+    $$("#btn-attachment-upload").click(function () {
+    });
+});
+
 //TicketPage 
 myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
@@ -179,3 +183,4 @@ myApp.onPageInit('ticketPage', function (page) {
         $$("#testRest").html(JSON.stringify(json));
     });
 });
+
