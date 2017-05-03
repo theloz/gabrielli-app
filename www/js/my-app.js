@@ -9,7 +9,7 @@ var $$ = Dom7;
 //Configuration for Camera
 var pictureSource;
 var destinationType;
-
+var myPath;
 //Configuration for Infinite Scrolling
 var loading = false;
 var lastIndex;
@@ -26,8 +26,12 @@ var mainView = myApp.addView('.view-main', {
 });
 
 $$(document).on('deviceready', function () {
-    pictureSource = navigator.camera.PictureSourceType.PHOTOLIBRARY;
-    destinationType = navigator.camera.DestinationType.DATA_URL;
+    pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
+      //Necessarie per navigare il file system  
+//    myPath = cordova.file.externalRootDirectory;
+//    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
+
 });
 
 /*-----------------
@@ -36,16 +40,16 @@ $$(document).on('deviceready', function () {
 //Before Init
 myApp.onPageBeforeInit('*', function (page) {
     //Check if user is logged in retrieving user from session 
-    if (window.sessionStorage.authorized === "") {
-        myApp.loginScreen(".login-screen", false);
-    } else {
+    if (typeof window.sessionStorage.authorized !== 'undefined' &&
+            window.sessionStorage.authorized !== null &&
+            window.sessionStorage.authorized !== "") {
         myApp.closeModal(".login-screen", false);
+    } else {
+        myApp.loginScreen(".login-screen", false);
     }
 });
-
 //Init for every page
 myApp.onPageInit("*", function () {});
-
 
 /*-----------------
  Single page
@@ -53,18 +57,19 @@ myApp.onPageInit("*", function () {});
 //Index
 myApp.onPageInit('index', function () {
     //In caso di refresh  elimina fa auto-login
-    if (window.sessionStorage.authorized === "") {
-        myApp.loginScreen(".login-screen", false);
-    } else {
+    if (typeof window.sessionStorage.authorized !== 'undefined' &&
+            window.sessionStorage.authorized !== null &&
+            window.sessionStorage.authorized !== "") {
         myApp.closeModal(".login-screen", false);
+    } else {
+        myApp.loginScreen(".login-screen", false);
     }
-
+    
     $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
     });
-    //Login Button
     $$("#btn-login").click(function () {
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
@@ -75,6 +80,8 @@ myApp.onPageInit('index', function () {
             console.log("Logged!");
         }
     });
+    
+    
     $$("#btn-test").click(function () {
         $$.ajax({
             headers: {
@@ -96,7 +103,6 @@ myApp.onPageInit('index', function () {
             }
         });
     });
-
 }).trigger();
 
 //Manage Ticket
@@ -115,11 +121,8 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 
     //Pull to refresh
     var ptrContent = $$('.pull-to-refresh-content');
-// Add 'refresh' listener on it
     ptrContent.on('ptr:refresh', function (e) {
-        // Emulate 2s loading
         setTimeout(function () {
-            // When loading done, we need to reset it
             myApp.pullToRefreshDone();
             manage_ticket.trigger();
         }, 1000);
@@ -133,8 +136,6 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     for (var i = 1; i <= itemsPerLoad; i++) {
         myList.push({"id": i, "titolo": "Ticket " + i});
     }
-
-
     var filter = {
         "stato": "aperto",
         "titolo": "pippo",
@@ -174,24 +175,22 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
         }, 500);
     });
 
-
     $$(".ticket-info").click(function () {
     });
 });
-
-function success() {}
-;
-function fail() {}
-;
 
 //New Ticket
 myApp.onPageInit("new_tkt", function () {
     $$("#btn-camera-upload").click(function () {
         capturePhotoWithData();
         //uploadFoto();
-
     });
     $$("#btn-attachment-upload").click(function () {
+        //Browse device app FileSystem on iOS
+        //listPath(myPath);
+        
+        //To browse only photo on iOS
+        //capturePhotoWithFile();
     });
 });
 
@@ -203,3 +202,38 @@ myApp.onPageInit('ticketPage', function (page) {
     });
 });
 
+//Funzioni per il caricamento da file system
+//function listPath(myPath) {
+//    var backLink = '<div onclick="listPath(' + "'" + myPath + "'" + ');" >' + myPath + '</div>';
+//    $$(".popup-filebrowser .title").html(backLink);
+//    window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+//        var directoryReader = dirEntry.createReader();
+//        directoryReader.readEntries(onSuccessCallback, onFailCallback);
+//    });
+//}
+
+//function onSuccessCallback(entries) {
+//    var html = '';
+//    for (i = 0; i < entries.length; i++) {
+//        var row = entries[i];
+//        if (row.isDirectory) {
+//            // We will draw the content of the clicked folder
+//            html += '<li onclick="listPath(' + "'" + row.nativeURL + "'" + ');" class="directory"><i class="icons f7-icons">folder</i>' + row.name + '</li>';
+//        } else {
+//            // alert the path of file
+//            html += '<li onclick="getFilepath(' + "'" + row.nativeURL + "'" + ');" class="file"><i class="icons f7-icons">tags</i>' + row.name + '</li>';
+//        }
+//    }
+//    if (html != "")
+//        $$(".popup-filebrowser #list-element").html(html);
+//    else
+//        $$(".popup-filebrowser #list-element").html("No elements!");
+//}
+//
+//function onFailCallback(e) {
+//    alert(error.e)
+//}
+//
+//function getFilepath(thefilepath) {
+//    alert(thefilepath);
+//}
