@@ -17,7 +17,7 @@ var mainView = myApp.addView('.view-main', {
 var loading = false;
 var lastIndex;
 // Max items to load 
-var maxItems = 20;
+var maxItems = 50;
 // Append items per load
 var itemsPerLoad = 10;
 
@@ -127,18 +127,18 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 //    }
     var filter = {
         "stato":"aperto",
-        "titolo":"pippo",
+//        "titolo":"pippo",
     };
     var sort = {
         "id" : "desc",
     };
-    var myList = getTktDataByFilter('0','10', filter, sort);
-    console.log(myList);
-    //console.log(JSON.stringify(myList));
-    //myApp.alert(myList);
-    //return false;
+    //var myList = getTktDataByFilter('0','10',filter, sort);
+    var myList;
+    myList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
+
     buildHtmlTable(myList);
     lastIndex = itemsPerLoad + 1;
+    
     $$('.infinite-scroll').on('infinite', function () {
         // Exit, if loading in progress
         if (loading)
@@ -149,18 +149,20 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
         setTimeout(function () {
             // Reset loading flag
             loading = false;
-            if (lastIndex >= maxItems) {
+            if ( lastIndex >= maxItems ) {
                 // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
                 myApp.detachInfiniteScroll($$('.infinite-scroll'));
                 // Remove preloader
                 $$('.infinite-scroll-preloader').remove();
                 return;
             }
-            var newList = [];
-            for (var i = lastIndex; i < lastIndex + itemsPerLoad; i++) {
-                newList.push({"id": i, "titolo": "Ticket " + i});
-            }
-            buildHtmlTableBody(newList, ["id", "titolo"]);
+//            var newList = [];
+//            for (var i = lastIndex; i < lastIndex + itemsPerLoad; i++) {
+//                newList.push({"id": i, "titolo": "Ticket " + i});
+//            }
+            var newList;
+            newList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
+            buildHtmlTableBody(newList, ["id", "titolo", "descrizione", "stato", "utente","fornitore","dttm"]);
             lastIndex = lastIndex + itemsPerLoad;
         }, 500);
     });

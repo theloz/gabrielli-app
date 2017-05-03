@@ -18,8 +18,7 @@ function buildHtmlTableBody(myList, columns) {
 }
 
 function addAllColumnHeaders(myList) {
-    console.log(myList);
-    console.log(typeOf(myList));
+
     var columnSet = [];
     var headerTr$ = $$('<tr/>');
 
@@ -35,7 +34,9 @@ function addAllColumnHeaders(myList) {
     $$(".data-table > table > thead").append(headerTr$);
     return columnSet;
 }
-function getTktDataByFilter( offset='' , limit='', filter=null, sort=null){
+function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
+//    console.log('getTktDataByFilter -> Inizio elaborazione');
+    var err;
     var filters = {};
     //alert('offset: '+offset+' limit: '+limit);
     if( offset != '' ){
@@ -63,44 +64,61 @@ function getTktDataByFilter( offset='' , limit='', filter=null, sort=null){
         //console.log(filters.filter);
     }
 //    alert(filters['limit']);
-    /*$$.ajax({
+//    $$(document).on('ajax:start', function(e){
+//        var xhr = e.detail.xhr;
+//        xhr.setRequestHeader('Authorization', 'Bearer 102-token');
+//        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+//    });
+    $$.ajax({
         headers: {
             'Authorization': 'Bearer 102-token',
             'Access-Control-Allow-Origin': '*',
-            //'Content-type': 'multipart/form-data',
-            //'dataType':'json',
+            'Content-type': 'application/x-www-form-urlencoded',
+//            'dataType':'json',
         },
         data: filters,
-        url: 'http://192.168.3.9/v1/ttm/listfilters',
-        method: 'GET',
-        processData: false,
-        contentType: 'application/x-www-form-urlencoded',
+        async: false, //needed if you want to populate variable directly without an additional callback
+        url: 'http://192.168.3.9/v2/ttm/listfilters',
+        method: 'POST',
+        dataType: 'json', //compulsory to receive values as an object
+        processData: true, //ignore parameters if sets to false
+        //contentType: 'application/x-www-form-urlencoded',
         crossDomain: true,
             error: function (data, status, xhr) {
                 //alert(JSON.stringify(data));
                 myApp.alert('Nessun dato da caricare');
-                return 'err_00';
+                err = 'err_00'
             },
             success: function (data, status, xhr) {
-                console.log(data);
-                //alert("success");
-                return data;
+                myList = data;
             },
         statusCode: {
             401: function (xhr) {
                 alert('App non autorizzata ad ottenere i dati');
             }
         }
-    });*/
-    
-    $$(document).on('ajaxStart', function(e){
-        var xhr = e.detail.xhr;
-        xhr.setRequestHeader('Authorization', 'Bearer 102-token');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     });
     
-    $$.post('http://192.168.3.9/v1/ttm/listfilters', filters, function (response) {
-        //console.log(response);
-        return response;
-    });
+//    $$(document).on('ajaxStart', function(e){
+//        var xhr = e.detail.xhr;
+//        xhr.setRequestHeader('Authorization', 'Bearer 102-token');
+//        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+//    });
+//    var lista;
+//    $$.post(
+//            'http://192.168.3.9/v1/ttm/listfilters', 
+//            filters, 
+////            function (data, status, xhr) {
+////                console.log('chiamata xhr');
+////                //callback(data);
+////                lista = data;
+////                //return response;
+////            },
+//    );
+//    console.log('ajax-call outside');
+//    $$(document).on('ajax:complete', function (e) {
+//        var xhr = e.detail.xhr;
+//        console.log('request performed');
+//    });
+   return myList;
 }
