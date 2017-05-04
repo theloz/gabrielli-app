@@ -1,11 +1,8 @@
 // Initialize app
-var myApp = new Framework7({
-    template7Pages: true,
-});
+var myApp = new Framework7({template7Pages: true,});
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
-
 //Configuration for Camera
 var pictureSource;
 var destinationType;
@@ -19,52 +16,53 @@ var maxItems = 50;
 var itemsPerLoad = 10;
 
 $$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
-
-// Add view
-var mainView = myApp.addView('.view-main', {
-    dynamicNavbar: true,
-});
+var mainView = myApp.addView('.view-main', {dynamicNavbar: true,});
 
 $$(document).on('deviceready', function () {
-    pictureSource = navigator.camera.PictureSourceType.PHOTOLIBRARY;
-    destinationType = navigator.camera.DestinationType.DATA_URL;
+    pictureSource = navigator.camera.PictureSourceType;
+    destinationType = navigator.camera.DestinationType;
+      //Necessarie per navigare il file system  
+//    myPath = cordova.file.externalRootDirectory;
+//    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
 });
 
-/*-----------------
- Every pages
- -----------------*/
+/*---------------------------------------
+              On ALL pages
+ ---------------------------------------*/
 //Before Init
 myApp.onPageBeforeInit('*', function (page) {
     //Check if user is logged in retrieving user from session 
-    if (window.sessionStorage.authorized === "") {
-        myApp.loginScreen(".login-screen", false);
-    } else {
+    if (typeof window.sessionStorage.authorized !== 'undefined' &&
+            window.sessionStorage.authorized !== null &&
+            window.sessionStorage.authorized !== "") {
         myApp.closeModal(".login-screen", false);
+    } else {
+        myApp.loginScreen(".login-screen", false);
     }
 });
-
 //Init for every page
 myApp.onPageInit("*", function () {});
 
+/*---------------------------------------
+              On EACH page
+ ---------------------------------------*/
 
-/*-----------------
- Single page
- -----------------*/
-//Index
-myApp.onPageInit('index', function () {
+//INDEX
+var index = myApp.onPageInit('index', function () {
     //In caso di refresh  elimina fa auto-login
-    if (window.sessionStorage.authorized === "") {
-        myApp.loginScreen(".login-screen", false);
-    } else {
+    if (typeof window.sessionStorage.authorized !== 'undefined' &&
+            window.sessionStorage.authorized !== null &&
+            window.sessionStorage.authorized !== "") {
         myApp.closeModal(".login-screen", false);
+    } else {
+        myApp.loginScreen(".login-screen", false);
     }
-
+    
     $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
     $$("#btn-logout").click(function () {
         window.sessionStorage.clear();
         myApp.loginScreen(".login-screen", false);
     });
-    //Login Button
     $$("#btn-login").click(function () {
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
@@ -75,6 +73,7 @@ myApp.onPageInit('index', function () {
             console.log("Logged!");
         }
     });
+    
     $$("#btn-test").click(function () {
         $$.ajax({
             headers: {
@@ -96,18 +95,14 @@ myApp.onPageInit('index', function () {
             }
         });
     });
-
 }).trigger();
 
-//Manage Ticket
+//MANAGE TICKET
 var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     //Pull to refresh
     var ptrContent = $$('.pull-to-refresh-content');
-// Add 'refresh' listener on it
     ptrContent.on('ptr:refresh', function (e) {
-        // Emulate 2s loading
         setTimeout(function () {
-            // When loading done, we need to reset it
             myApp.pullToRefreshDone();
             manage_ticket.trigger();
         }, 1000);
@@ -154,33 +149,67 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
             lastIndex = lastIndex + itemsPerLoad;
         }, 500);
     });
-
-
     $$(".ticket-info").click(function () {
     });
 });
 
-function success() {}
-;
-function fail() {}
-;
-
-//New Ticket
-myApp.onPageInit("new_tkt", function () {
+//NEW TICKET
+var new_tkt = myApp.onPageInit("new_tkt", function () {
     $$("#btn-camera-upload").click(function () {
         capturePhotoWithData();
         //uploadFoto();
-
     });
     $$("#btn-attachment-upload").click(function () {
+        //Browse device app FileSystem on iOS
+        //listPath(myPath);
+        
+        //To browse only photo on iOS
+        //capturePhotoWithFile();
     });
 });
 
-//TicketPage 
-myApp.onPageInit('ticketPage', function (page) {
+//DETAIL TICKET 
+var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
     $$.getJSON('http://192.168.3.9/v1/ttm/oneticket?id=' + ticketId + '', function (json) {
         $$("#testRest").html(JSON.stringify(json));
     });
 });
+
+//Funzioni per il caricamento da file system
+//function listPath(myPath) {
+//    var backLink = '<div onclick="listPath(' + "'" + myPath + "'" + ');" >' + myPath + '</div>';
+//    $$(".popup-filebrowser .title").html(backLink);
+//    window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+//        var directoryReader = dirEntry.createReader();
+//        directoryReader.readEntries(onSuccessCallback, onFailCallback);
+//    });
+//}
+
+//function onSuccessCallback(entries) {
+//    var html = '';
+//    for (i = 0; i < entries.length; i++) {
+//        var row = entries[i];
+//        if (row.isDirectory) {
+//            // We will draw the content of the clicked folder
+//            html += '<li onclick="listPath(' + "'" + row.nativeURL + "'" + ');" class="directory"><i class="icons f7-icons">folder</i>' + row.name + '</li>';
+//        } else {
+//            // alert the path of file
+//            html += '<li onclick="getFilepath(' + "'" + row.nativeURL + "'" + ');" class="file"><i class="icons f7-icons">tags</i>' + row.name + '</li>';
+//        }
+//    }
+//    if (html != "")
+//        $$(".popup-filebrowser #list-element").html(html);
+//    else
+//        $$(".popup-filebrowser #list-element").html("No elements!");
+//}
+//
+//function onFailCallback(e) {
+//    alert(error.e)
+//}
+//
+//function getFilepath(thefilepath) {
+//    alert(thefilepath);
+//}
+
 

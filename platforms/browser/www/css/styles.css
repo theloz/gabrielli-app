@@ -50,3 +50,14 @@
   width:34px;
   height:34px;
 }    
+
+.directory, .file{
+    padding: 5px;
+    list-style-type: none;
+}
+.directory{
+    
+}
+.file{
+    
+}
