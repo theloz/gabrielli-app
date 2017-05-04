@@ -139,10 +139,6 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
                 $$('.infinite-scroll-preloader').remove();
                 return;
             }
-//            var newList = [];
-//            for (var i = lastIndex; i < lastIndex + itemsPerLoad; i++) {
-//                newList.push({"id": i, "titolo": "Ticket " + i});
-//            }
             var newList;
             newList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
             buildHtmlTableBody(newList, ["id", "titolo", "descrizione", "stato", "utente","fornitore","dttm"]);
