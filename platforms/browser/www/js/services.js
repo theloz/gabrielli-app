@@ -62,6 +62,87 @@ function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
     });
     return myList;
 }
+
+function validateUser(uuid='',upwd=''){
+    var chkLogin = false;
+//    return true;
+    $$.ajax({
+        headers: {
+//            'Authorization': 'Bearer 102-token',
+            'Access-Control-Allow-Origin': '*',
+            "username": uuid,
+            "password": upwd,
+            "cache-control": "no-cache"
+        },
+        url: 'http://192.168.2.79:10039/AFBNetWS/resourcesMaximo/userProfile/login',
+        method: 'GET',
+        crossDomain: true,
+        async: false,
+        success: function (data, status, xhr) {
+            data = JSON.parse(data);
+//            myApp.alert(data.statusCode,"Status code");
+//            myApp.alert(data.jSessionID,"JSESSIONID");
+            if( data.statusCode == 200 && data.jSessionID != '' ){
+                window.sessionStorage.setItem("jsessionid", data.jSessionID);
+                chkLogin = true;
+            }
+        },
+        statusCode: {
+            401: function (xhr) {
+                myApp.alert('Errore chiamata servizio di login','Login Error');
+            }
+        },
+        error: function (data, status, xhr) {
+//            var output;
+//            for (var key in data) {
+//                if (data.hasOwnProperty(key)) {
+//                    output += key + " -> " + data[key];
+//                }
+//            }
+            myApp.alert('Servizio di login non disponibile.', "Login error");
+        }
+    });
+    return chkLogin;
+}
+function getUserAnag(){
+    var ctrl = false;
+    if(window.sessionStorage.jsessionid == ''){
+        myApp.alert("Sessione scaduta");
+    }
+    else{
+//        myApp.alert(window.sessionStorage.jsessionid);
+        $$.ajax({
+            headers: {
+    //            'Authorization': 'Bearer 102-token',
+                'Access-Control-Allow-Origin': '*',
+                "jSessionID": window.sessionStorage.jsessionid,
+                "cache-control": "no-cache"
+            },
+            url: 'http://192.168.2.79:10039/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
+            method: 'GET',
+            crossDomain: true,
+            async: false,
+            success: function (data, status, xhr) {
+                data = JSON.parse(data);
+                window.sessionStorage.setItem("codcliamm", data.codcliamm);
+                window.sessionStorage.setItem("codforamm", data.codforamm);
+                window.sessionStorage.setItem("codicefiscale", data.codicefiscale);
+            },
+            statusCode: {
+                401: function (xhr) {
+                    myApp.alert('Errore chiamata servizio di profilo utente','User profile Error');
+                }
+            },
+            error: function (data, status, xhr) {
+                myApp.alert('Servizio di login non disponibile.', "User profile error");
+            }
+        });
+    }
+    return ctrl;
+}
+function getMaximoTktList(){
+    
+}
 function uploadFoto() {
     var img = {};
     img = {

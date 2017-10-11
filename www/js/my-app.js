@@ -66,12 +66,27 @@ var index = myApp.onPageInit('index', function () {
     $$("#btn-login").click(function () {
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
-        if (formLogin.username === "asd") {
+        var chkLogin;
+        chkLogin = validateUser(formLogin.username, formLogin.password);
+//        myApp.alert('chklogin value: '+chkLogin);
+        
+        if(chkLogin){
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             myApp.closeModal(".login-screen", false);                              //Close login screen
-            console.log("Logged!");
+//            console.log("Logged!");
+            getUserAnag();
+            myApp.alert(window.sessionStorage.codicefiscale);
         }
+        else{
+            myApp.alert("User name o password errati","Login error");
+        }
+//        if (formLogin.username === "asd") {
+//            window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
+//            window.sessionStorage.setItem("authorized", 1);                 //Set token auth
+//            myApp.closeModal(".login-screen", false);                              //Close login screen
+//            console.log("Logged!");
+//        }
     });
     
     $$("#btn-test").click(function () {

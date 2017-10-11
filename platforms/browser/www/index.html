@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Security-Policy" content=" default-src 'self' http://192.168.3.9 data:  gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' http://192.168.2.161 data:  gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+        <meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src * 'unsafe-inline' 'unsafe-eval'">
         <!-- Required meta tags-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
@@ -129,8 +130,8 @@
                         </form>
                         <div class="content-block">
                             <div class="content-block">
-                                <a href="#" id="btn-login" class="button button-fill button-big button-raised color-amber btn-spacer">Conferma</a>
-                                <a href="#" id="btn-test" class="button button-fill button-big button-raised color-amber btn-spacer">TEST</a>
+                                <a href="javascript:void(0);" id="btn-login" class="button button-fill button-big button-raised color-amber btn-spacer">Conferma</a>
+                                <!--<a href="#" id="btn-test" class="button button-fill button-big button-raised color-amber btn-spacer">TEST</a>-->
                             </div>
                         </div>
                     </div>
