@@ -90,3 +90,64 @@ function uploadFoto() {
         }
     });
 }
+
+// funzione reperimento documenti
+function getDocumentList(docType,dateFrom,dateTo,docContains){
+    
+//    var obj = {};
+//    obj.filters = [
+//    {
+//        'key': 'RDTipoDocumento',
+//        'value': "",
+//        'op': 'contain'  //contains or equals
+//    },
+//    {
+//        'key': 'RDDataDocumento',
+//        'from': dateFrom,
+//        'to': dateTo,
+//        'op': 'between'
+//    },
+//
+//    {
+//        'key': 'RDNumeroDocumento',
+//        'value': docContains,
+//        'op': 'contain'  //contains or equals
+//    }];
+
+    
+    $$.ajax({
+        headers: {
+            'Authorization': 'Bearer 102-token',
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'application/x-www-form-urlencoded',
+            'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
+//            'DocFilterTipoDocumento':'op=contain,value='+docType,
+            'DocFilterNumeroDocumento':'op=contain,value='+docContains 
+//            'dataType':'json',
+        },
+//        data: '{ "filters":[{ "key":"RDTipoDocumento", "op":"contain", "value":"DDT" },{ "key":"RDDataDocumento", "op":"between", "from":"", "to":"" },{ "key":"RDNumeroDocumento", "op":"contain", "value":"" }]}',
+//        data: JSON.stringify(obj),
+        async: false, //needed if you want to populate variable directly without an additional callback
+//        url: 'http://192.168.3.9/v2/ttm/listfilters',
+        url: 'http://192.168.3.9/v2/docs/listfilters',
+        method: 'GET',
+        dataType: 'json', //compulsory to receive values as an object
+        processData: true, //ignore parameters if sets to false
+        //contentType: 'application/x-www-form-urlencoded',
+        crossDomain: true,
+            error: function (data, status, xhr) {
+                //alert(JSON.stringify(data));
+                myApp.alert('Nessun dato da caricare');
+                err = 'err_00'
+            },
+            success: function (data, status, xhr) {
+                docTableData = data;
+            },
+        statusCode: {
+            401: function (xhr) {
+                myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+            }
+        }
+    });
+    return docTableData;
+}

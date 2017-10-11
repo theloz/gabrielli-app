@@ -24,6 +24,9 @@
         },
         "cordova-plugin-file-opener2": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-open": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
     "dependent_plugins": {

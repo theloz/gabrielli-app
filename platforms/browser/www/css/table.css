@@ -265,6 +265,7 @@ html.ios-gt-8 .data-table .data-table-title {
   font-size: 14px;
 }
 @media (max-width: 480px) and (orientation: portrait) {
+
   .data-table.data-table-collapsible thead {
     display: none;
   }

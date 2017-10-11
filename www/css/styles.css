@@ -61,3 +61,53 @@
 .file{
     
 }
+
+.titleDocumentPage{
+    font-size: 18px;
+    text-align: center;
+}
+.datePickerFrom, .datePickerTo, .searchForNumberFrom, .searchForNumberTo, .docContains{
+    height: 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid;
+    border-radius: 0px !important;
+    font-size: 15px;
+}
+.iconCalendar{
+    vertical-align: middle;
+    color: #5a483e;
+    margin-top: 20px;
+    display: block;
+    text-align: left;
+}
+.datePickerContainer, .searchForNumberContainer{
+    padding: 0px 5px;
+    margin-bottom: 20px;
+}
+.documentSearchCount{
+    display: none;
+    margin: 1em auto;
+    text-transform: uppercase;
+}
+.docContainer .data-table{
+    width: 100%;
+}
+.tbodyDocumentList td{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.nodisplay{
+    visibility: hidden;
+}
+.backToTop{
+       background: #ffc107!important;
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+    .tbodyDocumentList td{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}

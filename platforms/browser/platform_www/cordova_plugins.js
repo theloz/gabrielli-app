@@ -248,6 +248,14 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.fileOpener2"
         ]
+    },
+    {
+        "file": "plugins/cordova-open/www/disusered.open.js",
+        "id": "cordova-open.Open",
+        "pluginId": "cordova-open",
+        "merges": [
+            "cordova.plugins.disusered"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -260,7 +268,8 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.6.3",
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-file": "4.3.3",
-    "cordova-plugin-file-opener2": "2.0.15"
+    "cordova-plugin-file-opener2": "2.0.15",
+    "cordova-open": "1.0.12"
 }
 // BOTTOM OF METADATA
 });

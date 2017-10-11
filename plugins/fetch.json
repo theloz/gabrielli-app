@@ -62,5 +62,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-open": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-open"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

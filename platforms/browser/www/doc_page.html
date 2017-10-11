@@ -1,0 +1,59 @@
+
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link"><i class="icon f7-icons">chevron_left</i></a></div>
+        <div class="center"><div class="item-media"><img id="img-logo" src="public/img/logo.jpg" /></div></div>
+        <div class="right"><a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a></div>
+    </div>
+</div>
+<div class="pages">
+    <div data-page="doc_page" class="page">
+        <div class="page-content infinite-scroll" data-distance="1000">
+            <div class="content-block">
+                <div class="center"><h2 class="titleDocumentPage "></h2></div>
+                <input type="hidden" value="" name="hiddenInputId" class="hiddenInputId" /> 
+                
+                <div class="datePickerContainer row">
+                    <div class="col-30">
+                        <span>DATA</span>
+                        <i class="f7-icons iconCalendar">calendar</i>
+                    </div>
+                    <div class="col-70">
+                        <input type="text" value="" placeholder="Dal" class="datePickerFrom" />
+                        <input type="text" value="" placeholder="Al" class="datePickerTo" />
+                    </div>
+                </div>
+                
+                <div class="searchForNumberContainer row">
+                     <div class="col-30">
+                         <span>NUMERO</span>
+                        <i class="f7-icons iconCalendar">keyboard</i>
+                    </div>
+                    <div class="col-70">
+<!--                        <input type="number" value="" placeholder="Da" class="searchForNumberFrom" />
+                        <input type="number" value="" placeholder="A" class="searchForNumberTo" />-->
+                        <input type="number" value="" placeholder="Numero Doc" class="docContains" />
+                    </div>
+                </div>
+                
+                <p><a class="button button-fill button-big button-raised color-amber btn-spacer submitDocForm" href="#" >RICERCA</a></p>
+            </div>
+            <div class="docContainer row">
+                <p class="documentSearchCount">Documenti trovati: <span class="docCount"></span></p>
+                <div class="data-table data-table-collapsible data-table-init" >
+                    <table>
+                        <thead></thead>
+                        <tbody class="tbodyDocumentList"></tbody>
+                    </table>
+                </div>
+            </div>
+<!--            Preloader add when the user click search button-->
+            <div class="infinite-scroll-preloader nodisplay">
+                <div class="preloader"></div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
