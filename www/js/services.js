@@ -123,7 +123,7 @@ function validateUser(uuid='',upwd=''){
             "password": upwd,
             "cache-control": "no-cache"
         },
-        url: 'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesMaximo/userProfile/login',
+        url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/login',
         method: 'GET',
         crossDomain: true,
         async: false,
