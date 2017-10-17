@@ -83,7 +83,7 @@ var index = myApp.onPageInit('index', function () {
             myApp.closeModal(".login-screen", false);                              //Close login screen
 //            console.log("Logged!");
             getUserAnag();
-            myApp.alert(window.sessionStorage.codicefiscale);
+            //myApp.alert(window.sessionStorage.codicefiscale);
         }
         else{
             myApp.alert("User name o password errati","Login error");
