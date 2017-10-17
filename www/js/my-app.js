@@ -197,12 +197,12 @@ var ticketPage = myApp.onPageInit('ticketPage', function (page) {
 // DOC PAGE
 var doc_page = myApp.onPageInit('doc_page', function (page) {
     // Prendo i parametri dalla pagina e setto il titolo e il campo hidden per il submit della form
-    var title = page.query.pageName.replace(/_/g, ' ');
-    var inputHiddenId = page.query.idPage;
+//    var title = page.query.pageName.replace(/_/g, ' ');
+//    var inputHiddenId = page.query.idPage;
     var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
     var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
-    $$('.titleDocumentPage').text(title);
-    $$('.hiddenInputId').val(inputHiddenId);
+//    $$('.titleDocumentPage').text(title);
+//    $$('.hiddenInputId').val(inputHiddenId);
 
     var myCalendar = myApp.calendar({
         input: '.datePickerFrom',
@@ -218,6 +218,13 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
         monthNames: months,
         dayNamesShort: days
     });
+//  $(".onlyNumber").on('keyup keydown change keypress', function (e) {
+//     //if the letter is not digit then display error and don't type anything
+//     if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+//        //display error message
+//               return false;
+//    }
+//   });
 
 
     $$('.infinite-scroll').on('infinite', function () {
@@ -248,24 +255,37 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
     $$('.backToTop').on('click', function () {
          $('.page-content').animate({scrollTop: 0}, 500);
     });
+
+    
     
     $$('.submitDocForm').on('click', function () {
 //        myApp.showPreloader(); da decommentare e aggiungere  myApp.hidePreloader(); dopo la creazione della tabella
 //        var ref = cordova.InAppBrowser.open('http://www.pdf995.com/samples/pdf.pdf', '_system', 'location=yes'); codice apertura pdf da URL
 //
         //svuoto la tabella se è già popolata prima di effettuare una nuova ricerca
+        myApp.showPreloader()
         $$('.backToTop').addClass('nodisplay');
         $$('.tbodyDocumentList').empty();
         docTableData = [];
-        var docType = inputHiddenId;
+//        var docType = inputHiddenId;
+        var docAmountFrom = $$('.docAmountFrom').val();
+        var docAmountTo = $$('.docAmountTo').val();
         var dateFrom = formatDateFromItalian($$('.datePickerFrom').val());
         var dateTo = formatDateFromItalian($$('.datePickerTo').val());
         var docContains = $$('.docContains').val();
+        //modifico se vuoto
+        docAmountFrom = (docAmountFrom === "") ? '0' : docAmountFrom;
+        docAmountTo = (docAmountTo === "") ? '99999999' : docAmountTo;
+        docContains = (docContains === "") ? 'ALL' : docContains;
+        dateFrom = (dateFrom === "") ? '1970-01-01' : dateFrom;
+        dateTo = (dateTo === "") ? '2999-01-01' : dateTo;
+        
         lastIndexDoc = 0;
         limitDoc = 10;
-        searchDocWithFilters(docType, dateFrom, dateTo, docContains, limitDoc, lastIndexDoc);
+        searchDocWithFilters(docAmountFrom,docAmountTo, dateFrom, dateTo, docContains, limitDoc, lastIndexDoc);
         loading = false;
         $('.page-content').animate({scrollTop: 330}, 500);
+        
 
     });
 

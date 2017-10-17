@@ -47,20 +47,64 @@ function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
         //contentType: 'application/x-www-form-urlencoded',
         crossDomain: true,
             error: function (data, status, xhr) {
+               
                 //alert(JSON.stringify(data));
                 myApp.alert('Nessun dato da caricare');
                 err = 'err_00'
             },
             success: function (data, status, xhr) {
+                
                 myList = data;
             },
         statusCode: {
+
             401: function (xhr) {
                 alert('App non autorizzata ad ottenere i dati');
             }
         }
     });
     return myList;
+}
+
+
+function getUserAnag(){
+    var ctrl = false;
+    if(window.sessionStorage.jsessionid === ''){
+        myApp.alert("Sessione scaduta");
+    }
+    else{
+//        myApp.alert(window.sessionStorage.jsessionid);
+        $$.ajax({
+            headers: {
+    //            'Authorization': 'Bearer 102-token',
+                'Access-Control-Allow-Origin': '*',
+                "jSessionID": window.sessionStorage.jsessionid,
+                "cache-control": "no-cache"
+            },
+            url: 'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
+            method: 'GET',
+            crossDomain: true,
+            async: false,
+            success: function (data, status, xhr) {
+                data = JSON.parse(data);
+                window.sessionStorage.setItem("codcliamm", data.codcliamm);
+                window.sessionStorage.setItem("codforamm", data.codforamm);
+                window.sessionStorage.setItem("codicefiscale", data.codicefiscale);
+            },
+            statusCode: {
+                401: function (xhr) {
+                    myApp.alert('Errore chiamata servizio di profilo utente','User profile Error');
+                }
+            },
+            error: function (data, status, xhr) {
+                myApp.alert('Servizio di login non disponibile.', "User profile error");
+            }
+        });
+    }
+    return ctrl;
+}
+function getMaximoTktList(){
+    
 }
 
 function validateUser(uuid='',upwd=''){
@@ -79,7 +123,7 @@ function validateUser(uuid='',upwd=''){
             "password": upwd,
             "cache-control": "no-cache"
         },
-        url: 'http://192.168.2.79:10039/AFBNetWS/resourcesMaximo/userProfile/login',
+        url: 'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesMaximo/userProfile/login',
         method: 'GET',
         crossDomain: true,
         async: false,
@@ -109,45 +153,7 @@ function validateUser(uuid='',upwd=''){
     });
     return chkLogin;
 }
-function getUserAnag(){
-    var ctrl = false;
-    if(window.sessionStorage.jsessionid == ''){
-        myApp.alert("Sessione scaduta");
-    }
-    else{
-//        myApp.alert(window.sessionStorage.jsessionid);
-        $$.ajax({
-            headers: {
-    //            'Authorization': 'Bearer 102-token',
-                'Access-Control-Allow-Origin': '*',
-                "jSessionID": window.sessionStorage.jsessionid,
-                "cache-control": "no-cache"
-            },
-            url: 'http://192.168.2.79:10039/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
-            method: 'GET',
-            crossDomain: true,
-            async: false,
-            success: function (data, status, xhr) {
-                data = JSON.parse(data);
-                window.sessionStorage.setItem("codcliamm", data.codcliamm);
-                window.sessionStorage.setItem("codforamm", data.codforamm);
-                window.sessionStorage.setItem("codicefiscale", data.codicefiscale);
-            },
-            statusCode: {
-                401: function (xhr) {
-                    myApp.alert('Errore chiamata servizio di profilo utente','User profile Error');
-                }
-            },
-            error: function (data, status, xhr) {
-                myApp.alert('Servizio di login non disponibile.', "User profile error");
-            }
-        });
-    }
-    return ctrl;
-}
-function getMaximoTktList(){
-    
-}
+
 function uploadFoto() {
     var img = {};
     img = {
@@ -168,17 +174,17 @@ function uploadFoto() {
         },
         statusCode: {
             401: function (xhr) {
-                alert('Macchettecarichi!');
+                alert('failure!');
             }
         },
         error: function (data, status, xhr) {
-            alert('errore distruzione di massa!!');
+            alert('failure!!');
         }
     });
 }
 
 // funzione reperimento documenti
-function getDocumentList(docType,dateFrom,dateTo,docContains){
+function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
     
 //    var obj = {};
 //    obj.filters = [
@@ -200,40 +206,55 @@ function getDocumentList(docType,dateFrom,dateTo,docContains){
 //        'op': 'contain'  //contains or equals
 //    }];
 
-    
-    $$.ajax({
-        headers: {
-            'Authorization': 'Bearer 102-token',
-            'Access-Control-Allow-Origin': '*',
-            'Content-type': 'application/x-www-form-urlencoded',
-            'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
-//            'DocFilterTipoDocumento':'op=contain,value='+docType,
-            'DocFilterNumeroDocumento':'op=contain,value='+docContains 
-//            'dataType':'json',
-        },
-//        data: '{ "filters":[{ "key":"RDTipoDocumento", "op":"contain", "value":"DDT" },{ "key":"RDDataDocumento", "op":"between", "from":"", "to":"" },{ "key":"RDNumeroDocumento", "op":"contain", "value":"" }]}',
-//        data: JSON.stringify(obj),
-        async: false, //needed if you want to populate variable directly without an additional callback
-//        url: 'http://192.168.3.9/v2/ttm/listfilters',
-        url: 'http://192.168.3.9/v2/docs/listfilters',
-        method: 'GET',
-        dataType: 'json', //compulsory to receive values as an object
-        processData: true, //ignore parameters if sets to false
-        //contentType: 'application/x-www-form-urlencoded',
-        crossDomain: true,
-            error: function (data, status, xhr) {
-                //alert(JSON.stringify(data));
-                myApp.alert('Nessun dato da caricare');
-                err = 'err_00'
-            },
-            success: function (data, status, xhr) {
-                docTableData = data;
-            },
-        statusCode: {
-            401: function (xhr) {
-                myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+        if(window.sessionStorage.jsessionid === ''){
+            myApp.hidePreloader();
+             myApp.alert('Clicca per effettuare il login', 'Sessione Scaduta', function () {
+                window.sessionStorage.clear();
+                myApp.loginScreen(".login-screen", false);
+        });
+        }else{
+            //sostituire il codice fiscale con +window.sessionStorage.codicefiscale
+            $$.ajax({
+                headers: {
+                    'Authorization': 'Bearer 102-token',
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'jSessionID': window.sessionStorage.jsessionid,
+                    'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
+        //            'DocFilterTipoDocumento':'op=contain,value='+docType,
+                    'DocFilterCodiceFiscale':'op=equal,value=01654010345',
+                    'DocFilterImporto':'op=between,from='+docAmountFrom+',to='+docAmountTo,
+                    'DocFilterNumeroDocumento':'op=contain,value='+docContains 
+        //            'dataType':'json',
+                },
+        //        data: '{ "filters":[{ "key":"RDTipoDocumento", "op":"contain", "value":"DDT" },{ "key":"RDDataDocumento", "op":"between", "from":"", "to":"" },{ "key":"RDNumeroDocumento", "op":"contain", "value":"" }]}',
+        //        data: JSON.stringify(obj),
+                async: false, //needed if you want to populate variable directly without an additional callback
+        //        url: 'http://192.168.3.9/v2/ttm/listfilters',
+        //        url: 'http://192.168.3.9/v2/docs/listfilters',
+                url :'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
+                method: 'GET',
+                dataType: 'json', //compulsory to receive values as an object
+                processData: true, //ignore parameters if sets to false
+                //contentType: 'application/x-www-form-urlencoded',
+                crossDomain: true,
+                    error: function (data, status, xhr) {
+                        myApp.hidePreloader();
+                        //alert(JSON.stringify(data));
+                        myApp.alert('Errore reperimento dati');
+                        err = 'err_00'
+                    },
+                    success: function (data, status, xhr) {
+                            myApp.hidePreloader();
+                            docTableData = data.documents;                 
+                    },
+
+                statusCode: {
+                    401: function (xhr) {
+                        myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                    }
+                }
+            });
+                return docTableData;
             }
-        }
-    });
-    return docTableData;
 }
