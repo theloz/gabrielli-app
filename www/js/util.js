@@ -124,7 +124,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
     }
         $$('.doc-info_pdf').on('click', function (e) {
          var linkPDF = e.currentTarget.getAttribute("data-linkpdf");
-         myApp.alert('url: '+linkPDF);
+         //myApp.alert('url: '+linkPDF);
          if(linkPDF){
             //var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
           var ref = window.open(linkPDF, '_system', 'location=yes'); 
