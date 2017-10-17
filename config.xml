@@ -33,7 +33,7 @@
     <plugin name="com.phonegap.plugins.cordova-plugin-camera "spec="~1" />
     <plugin name="com.phonegap.plugins.cordova-plugin-file-transfer" spec="~1" />
     
-    <plugin name="com.phonegap.plugins.cordova-plugin-file spec="1.7.2" />
+    <plugin name="com.phonegap.plugins.cordova-plugin-file" spec="1.7.2" />
  
 
 </widget>
