@@ -34,7 +34,7 @@
     <plugin name="com.phonegap.plugins.cordova-plugin-file-transfer" spec="~1" />
     
     <plugin spec="https://github.com/apache/cordova-plugin-file.git#1.7.2" source="git" />
-    <!--<plugin spec="https://github.com/apache/cordova-plugin-file#4.3.4" source="git" />-->
+ 
 
 </widget>
 
