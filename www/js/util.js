@@ -115,9 +115,9 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
         //valorizzo il link del pdf in modo da distinguere risfa e sharepoint
         var urlToOpenPdf="";
         if(cellValue.docPdf_Key_Doc_RISFA){
-            urlToOpenPdf = "http://portal.gabriellispa.it:10039/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&KeyDoc_RF="+cellValue.docPdf_Key_Doc_RISFA;
+            urlToOpenPdf = "http://portal.gabriellispa.it/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&KeyDoc_RF="+cellValue.docPdf_Key_Doc_RISFA;
         }else if(cellValue.docPdf_LinkUrl_SHARE_POINT){
-             urlToOpenPdf = "http://portal.gabriellispa.it:10039/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&LinkUrlDocumento_SP="+cellValue.docPdf_LinkUrl_SHARE_POINT;
+             urlToOpenPdf = "http://portal.gabriellispa.it/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&LinkUrlDocumento_SP="+cellValue.docPdf_LinkUrl_SHARE_POINT;
         }
         row$.append($$('<td data-collapsible-title="' + columns[4] + '"/>').html('<a href="#" class="doc-info_pdf" data-linkpdf="' + urlToOpenPdf + '"><i class="f7-icons">document_text_fill</i></a>'));
         $$(".data-table > table > tbody").append(row$);
