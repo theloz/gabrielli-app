@@ -81,7 +81,7 @@ function getUserAnag(){
                 "jSessionID": window.sessionStorage.jsessionid,
                 "cache-control": "no-cache"
             },
-            url: 'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
+            url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
             method: 'GET',
             crossDomain: true,
             async: false,
@@ -232,7 +232,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                 async: false, //needed if you want to populate variable directly without an additional callback
         //        url: 'http://192.168.3.9/v2/ttm/listfilters',
         //        url: 'http://192.168.3.9/v2/docs/listfilters',
-                url :'http://portal.gabriellispa.it:10039/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
+                url :'http://portal.gabriellispa.it/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
                 method: 'GET',
                 dataType: 'json', //compulsory to receive values as an object
                 processData: true, //ignore parameters if sets to false
