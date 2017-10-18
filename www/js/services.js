@@ -287,7 +287,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                     },
                     success: function (data, status, xhr) {
                             myApp.hidePreloader();
-                            alert(window.sessionStorage.jsessionid);
+                            // alert(window.sessionStorage.jsessionid);
                             if(data.status && data.status=='401'){
                                 getLogout();
                             }
