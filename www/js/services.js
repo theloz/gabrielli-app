@@ -47,19 +47,59 @@ function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
         //contentType: 'application/x-www-form-urlencoded',
         crossDomain: true,
             error: function (data, status, xhr) {
-               
+
                 //alert(JSON.stringify(data));
                 myApp.alert('Nessun dato da caricare');
                 err = 'err_00'
             },
             success: function (data, status, xhr) {
-                
+
                 myList = data;
             },
         statusCode: {
 
             401: function (xhr) {
                 alert('App non autorizzata ad ottenere i dati');
+            }
+        }
+    });
+    return myList;
+}
+
+function getMaximoTktList(){
+    var err;
+    var myList;
+    $$.ajax({
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "jSessionID": window.sessionStorage.jsessionid,
+            "cache-control": "no-cache"
+    //            'dataType':'json',
+        },
+        // data: filters,
+        async: false, //needed if you want to populate variable directly without an additional callback
+        // url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/' + window.sessionStorage.username,
+        url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/maxadmin',
+        method: 'GET',
+        dataType: 'json', //compulsory to receive values as an object
+        processData: true, //ignore parameters if sets to false
+        //contentType: 'application/x-www-form-urlencoded',
+        crossDomain: true,
+            error: function (data, status, xhr) {
+                //alert(JSON.stringify(data));
+                // myApp.alert('Nessun dato da caricare');
+                err = 'err_00'
+            },
+            success: function (data, status, xhr) {
+                myList = data;
+            },
+        statusCode: {
+            500: function(xhr){
+                // myApp.alert('Servizio Maximo non disponibile');
+                getLogout();
+            },
+            401: function (xhr) {
+                myApp.alert('App non autorizzata ad ottenere i dati');
             }
         }
     });
@@ -81,7 +121,7 @@ function getUserAnag(){
                 "jSessionID": window.sessionStorage.jsessionid,
                 "cache-control": "no-cache"
             },
-            url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/anagUtente/maxadmin',
+            url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/anagUtente/' + window.sessionStorage.username,
             method: 'GET',
             crossDomain: true,
             async: false,
@@ -103,10 +143,6 @@ function getUserAnag(){
     }
     return ctrl;
 }
-function getMaximoTktList(){
-    
-}
-
 function validateUser(uuid='',upwd=''){
     var chkLogin = false;
     if(uuid=='elia4ever'){
@@ -133,6 +169,7 @@ function validateUser(uuid='',upwd=''){
 //            myApp.alert(data.jSessionID,"JSESSIONID");
             if( data.statusCode == 200 && data.jSessionID != '' ){
                 window.sessionStorage.setItem("jsessionid", data.jSessionID);
+                window.sessionStorage.setItem("username", uuid);
                 chkLogin = true;
             }
         },
@@ -185,7 +222,7 @@ function uploadFoto() {
 
 // funzione reperimento documenti
 function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
-    
+
 //    var obj = {};
 //    obj.filters = [
 //    {
@@ -219,12 +256,16 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                     'Authorization': 'Bearer 102-token',
                     'Access-Control-Allow-Origin': '*',
                     'Content-type': 'application/x-www-form-urlencoded',
-                    'jSessionID': window.sessionStorage.jsessionid,
+                    // 'jSessionID': 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA',
+                    // 'jSessionID': window.sessionStorage.jsessionid ,
+                    // 'jSessionID': 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA' + window.sessionStorage.jsessionid,
+                    'jSessionID': window.sessionStorage.jsessionid + 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA',
                     'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
         //            'DocFilterTipoDocumento':'op=contain,value='+docType,
-                    'DocFilterCodiceFiscale':'op=equal,value=01654010345',
+                    // 'DocFilterCodiceFiscale':'op=equal,value=01654010345',
+                    'DocFilterCodiceFiscale':'op=equal,value='+window.sessionStorage.codicefiscale,
                     'DocFilterImporto':'op=between,from='+docAmountFrom+',to='+docAmountTo,
-                    'DocFilterNumeroDocumento':'op=contain,value='+docContains 
+                    'DocFilterNumeroDocumento':'op=contain,value='+docContains
         //            'dataType':'json',
                 },
         //        data: '{ "filters":[{ "key":"RDTipoDocumento", "op":"contain", "value":"DDT" },{ "key":"RDDataDocumento", "op":"between", "from":"", "to":"" },{ "key":"RDNumeroDocumento", "op":"contain", "value":"" }]}',
@@ -246,15 +287,28 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                     },
                     success: function (data, status, xhr) {
                             myApp.hidePreloader();
-                            docTableData = data.documents;                 
+                            alert(window.sessionStorage.jsessionid);
+                            if(data.status && data.status=='401'){
+                                getLogout();
+                            }
+                            else{
+                                docTableData = data.documents;
+                            }
                     },
 
                 statusCode: {
                     401: function (xhr) {
                         myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                    },
+                    500: function(xhr){
+                        getLogout();
                     }
                 }
             });
                 return docTableData;
             }
+}
+function getLogout(){
+    window.sessionStorage.clear();
+    myApp.loginScreen(".login-screen", false);
 }

@@ -26,6 +26,7 @@ function addAllColumnHeaders(myList) {
         var rowHash = myList[i];
         for (var key in rowHash) {
             if ($.inArray(key, columnSet) === -1) {
+                console.log(key);
                 columnSet.push(key);
                 headerTr$.append($$('<th/>').html(key));
             }
@@ -100,12 +101,9 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
     for (var i = lastIndexDoc; i < limit && i < myList.length; i++) {
         filterMyList.push(myList[i]);
     }
-
-
-
     for (var i = 0; i < filterMyList.length; i++) {
         var row$ = $$('<tr/>');
-        //DA MODIFICARE L'EMAIL DELLA RISPOSTA CON I VALORI EFFETTIVAMENTE RESTITUITI DAL JSON 
+        //DA MODIFICARE L'EMAIL DELLA RISPOSTA CON I VALORI EFFETTIVAMENTE RESTITUITI DAL JSON
         // PER REVERT SOSTITUIRE EX filterMyList[i].NumeroDocumento CON filterMyList[i].docNumber ECC...
         var cellValue = {'docNumber': filterMyList[i].NumeroDocumento, 'docTitle': filterMyList[i].Title, 'docDate': filterMyList[i].DataDocumento, 'docLinkEmail': filterMyList[i].doclink, 'docPdf_Key_Doc_RISFA': filterMyList[i].ChiaveDocumento,'docPdf_LinkUrl_SHARE_POINT': filterMyList[i].LinkUrl}
         row$.append($$('<td data-collapsible-title="' + columns[0] + '"/>').html('<a href="#" class="doc-info_number">' + cellValue.docNumber + '</a>'));
@@ -127,13 +125,40 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
          //myApp.alert('url: '+linkPDF);
          if(linkPDF){
             //var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
-          var ref = window.open(linkPDF, '_system', 'location=yes'); 
+          var ref = window.open(linkPDF, '_system', 'location=yes');
          }else{
              myApp.alert("Impossibile reperire il Pdf")
          }
-
     });
+}
+function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
+    var url;
+    var upperLimit =  lastIndexDoc + limit;
 
+    if ($$('.headerTable').length === 0 && myList.length > 0) {
+        var headerTr$ = $$('<tr/>');
+        for (var i = 0; i < columns.length; i++) {
+            headerTr$.append($$('<th class="headerTable"/>').html(headers[i]));
+        }
+        $$(".data-table > table > thead").append(headerTr$);
+    }
+    if (myList.length === 0) {
+        $$(".data-table > table > thead").empty();
+    }
+
+    console.log('index: '+lastIndexDoc+' limit: '+limit + ' count: ' + myList.length + ' upperLimit: ' + upperLimit);
+    for (var i = lastIndexDoc; i < upperLimit && i < myList.length; i++) {
+        var row$ = $$('<tr/>');
+        url = "ticketPage.html?id=" + myList[i].ticketid;
+        row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="doc-info_number">' + myList[i].ticketid + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].description + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[3] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].status + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[4] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].createdby + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[5] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].affectedperson + '</a>'));
+        row$.append($$('<td data-collapsible-title="' + headers[6] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + formatDateFromTimeStampToItalian(myList[i].creationdate) + '</a>'));
+        $$(".data-table > table > tbody").append(row$);
+    }
 }
 
 function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docContains, limit, lastIndexDoc) {
