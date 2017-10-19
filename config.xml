@@ -30,4 +30,6 @@
     <plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
     <plugin name="cordova-plugin-console" spec="~1.0.1" />
     <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
+    <gap:plugin name="cordova-plugin-email-composer" version="0.8.3" source="npm" />
+
 </widget>
