@@ -88,6 +88,15 @@ var index = myApp.onPageInit('index', function () {
             myApp.alert("User name o password errati","Login error");
         }
     });
+    $$('#mailtest').click(function (){
+        cordova.plugins.email.isAvailable(
+            function (isAvailable) {
+                // alert('Service is not available') unless isAvailable;
+                myApp.alert('mail exists');
+                cordova.plugins.email.open();
+            }
+        );
+    });
 }).trigger();
 
 //MANAGE TICKET
