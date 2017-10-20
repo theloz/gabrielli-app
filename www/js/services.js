@@ -1,6 +1,6 @@
 
 //Causa problemi se inserito in util
-var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+
 //Services
 function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
 //    console.log('getTktDataByFilter -> Inizio elaborazione');
@@ -264,27 +264,7 @@ function uploadFoto() {
 
 // funzione reperimento documenti
 function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
-
-//    var obj = {};
-//    obj.filters = [
-//    {
-//        'key': 'RDTipoDocumento',
-//        'value': "",
-//        'op': 'contain'  //contains or equals
-//    },
-//    {
-//        'key': 'RDDataDocumento',
-//        'from': dateFrom,
-//        'to': dateTo,
-//        'op': 'between'
-//    },
-//
-//    {
-//        'key': 'RDNumeroDocumento',
-//        'value': docContains,
-//        'op': 'contain'  //contains or equals
-//    }];
-
+    
         if(window.sessionStorage.jsessionid === ''){
             myApp.hidePreloader();
             getLogout();
@@ -295,9 +275,6 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                     'Authorization': 'Bearer 102-token',
                     'Access-Control-Allow-Origin': '*',
                     'Content-type': 'application/x-www-form-urlencoded',
-                    // 'jSessionID': 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA',
-                    // 'jSessionID': window.sessionStorage.jsessionid ,
-                    // 'jSessionID': 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA' + window.sessionStorage.jsessionid,
                     'jSessionID': window.sessionStorage.jsessionid + 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA',
                     'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
         //            'DocFilterTipoDocumento':'op=contain,value='+docType,
@@ -310,8 +287,6 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
         //        data: '{ "filters":[{ "key":"RDTipoDocumento", "op":"contain", "value":"DDT" },{ "key":"RDDataDocumento", "op":"between", "from":"", "to":"" },{ "key":"RDNumeroDocumento", "op":"contain", "value":"" }]}',
         //        data: JSON.stringify(obj),
                 async: false, //needed if you want to populate variable directly without an additional callback
-        //        url: 'http://192.168.3.9/v2/ttm/listfilters',
-        //        url: 'http://192.168.3.9/v2/docs/listfilters',
                 url : URL_ENDPOINT+'/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
                 method: 'GET',
                 dataType: 'json', //compulsory to receive values as an object
