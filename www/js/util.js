@@ -147,7 +147,7 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
     });
         $$('.doc-info_email').on('click', function (e) {
             myApp.showPreloader();
-            var title=e.currentTarget.getAttribute(" data-doc_title");
+            var title=e.currentTarget.getAttribute("data-doc_title");
             var keyDoc_RF = e.currentTarget.getAttribute("data-KeyDoc_RF");
             var linkUrlDocumento_SP = e.currentTarget.getAttribute("data-LinkUrlDocumento_SP");
             sendDocument(keyDoc_RF, linkUrlDocumento_SP,title);
