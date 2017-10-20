@@ -275,7 +275,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                     'Authorization': 'Bearer 102-token',
                     'Access-Control-Allow-Origin': '*',
                     'Content-type': 'application/x-www-form-urlencoded',
-                    'jSessionID': window.sessionStorage.jsessionid + 'SZFKLZSJòLKSJHDLKSJDKLJLKòSA',
+                    'jSessionID': window.sessionStorage.jsessionid,
                     'DocFilterDataDocumento':'op=between,from='+dateFrom+',to='+dateTo,
         //            'DocFilterTipoDocumento':'op=contain,value='+docType,
                     // 'DocFilterCodiceFiscale':'op=equal,value=01654010345',
