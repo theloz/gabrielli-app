@@ -101,22 +101,29 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
     for (var i = lastIndexDoc; i < limit && i < myList.length; i++) {
         filterMyList.push(myList[i]);
     }
+
+
+
     for (var i = 0; i < filterMyList.length; i++) {
         var row$ = $$('<tr/>');
-        //DA MODIFICARE L'EMAIL DELLA RISPOSTA CON I VALORI EFFETTIVAMENTE RESTITUITI DAL JSON
+        //DA MODIFICARE L'EMAIL DELLA RISPOSTA CON I VALORI EFFETTIVAMENTE RESTITUITI DAL JSON 
         // PER REVERT SOSTITUIRE EX filterMyList[i].NumeroDocumento CON filterMyList[i].docNumber ECC...
         var cellValue = {'docNumber': filterMyList[i].NumeroDocumento, 'docTitle': filterMyList[i].Title, 'docDate': filterMyList[i].DataDocumento, 'docLinkEmail': filterMyList[i].doclink, 'docPdf_Key_Doc_RISFA': filterMyList[i].ChiaveDocumento,'docPdf_LinkUrl_SHARE_POINT': filterMyList[i].LinkUrl}
         row$.append($$('<td data-collapsible-title="' + columns[0] + '"/>').html('<a href="#" class="doc-info_number">' + cellValue.docNumber + '</a>'));
         row$.append($$('<td data-collapsible-title="' + columns[1] + '"/>').html('<a href="#" class="doc-info_title">' + cellValue.docTitle + '</a>'));
         row$.append($$('<td data-collapsible-title="' + columns[2] + '"/>').html('<a href="#" class="doc-info_date">' + formatDateFromTimeStampToItalian(cellValue.docDate) + '</a>'));
-        row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_email" data-linkemail="' + cellValue.docLinkEmail + '"><i class="f7-icons">email</i></a>'));
         //valorizzo il link del pdf in modo da distinguere risfa e sharepoint
         var urlToOpenPdf="";
+
         if(cellValue.docPdf_Key_Doc_RISFA){
-            urlToOpenPdf = "http://portal.gabriellispa.it/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&KeyDoc_RF="+cellValue.docPdf_Key_Doc_RISFA;
+            urlToOpenPdf = URL_ENDPOINT+"/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&KeyDoc_RF="+cellValue.docPdf_Key_Doc_RISFA;         
+            row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="' +cellValue.docPdf_Key_Doc_RISFA+ '" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP=""><i class="f7-icons">email</i></a>'));
         }else if(cellValue.docPdf_LinkUrl_SHARE_POINT){
-             urlToOpenPdf = "http://portal.gabriellispa.it/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&LinkUrlDocumento_SP="+cellValue.docPdf_LinkUrl_SHARE_POINT;
+            urlToOpenPdf = URL_ENDPOINT+"/AFBNetWS/DocumentFileServlet?jSessionID="+window.sessionStorage.jsessionid+"&LinkUrlDocumento_SP="+cellValue.docPdf_LinkUrl_SHARE_POINT;            
+            row$.append($$('<td data-collapsible-title="' + columns[3] + '"/>').html('<a href="#" class="doc-info_email" data-KeyDoc_RF="" data-doc_title="' + cellValue.docTitle + '" data-LinkUrlDocumento_SP="'+cellValue.docPdf_LinkUrl_SHARE_POINT+'"><i class="f7-icons">email</i></a>'));
         }
+        
+     
         row$.append($$('<td data-collapsible-title="' + columns[4] + '"/>').html('<a href="#" class="doc-info_pdf" data-linkpdf="' + urlToOpenPdf + '"><i class="f7-icons">document_text_fill</i></a>'));
         $$(".data-table > table > tbody").append(row$);
     }
@@ -125,11 +132,20 @@ function buildDocumentTable(myList, columns, limit, lastIndexDoc) {
          //myApp.alert('url: '+linkPDF);
          if(linkPDF){
             //var ref = cordova.InAppBrowser.open(linkPDF, '_system', 'location=yes');
-          var ref = window.open(linkPDF, '_system', 'location=yes');
+          var ref = window.open(linkPDF, '_system', 'location=yes'); 
          }else{
              myApp.alert("Impossibile reperire il Pdf")
          }
+
     });
+        $$('.doc-info_email').on('click', function (e) {
+            myApp.showPreloader();
+            var title=e.currentTarget.getAttribute(" data-doc_title");
+            var keyDoc_RF = e.currentTarget.getAttribute("data-KeyDoc_RF");
+            var linkUrlDocumento_SP = e.currentTarget.getAttribute("data-LinkUrlDocumento_SP");
+            sendDocument(keyDoc_RF, linkUrlDocumento_SP,title);
+        });
+
 }
 function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
     var url;

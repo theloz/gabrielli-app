@@ -82,6 +82,7 @@ var index = myApp.onPageInit('index', function () {
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
             myApp.closeModal(".login-screen", false);                              //Close login screen
             getUserAnag();
+            getUserInfo();
 
         }
         else{
@@ -231,7 +232,7 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
 //        var ref = cordova.InAppBrowser.open('http://www.pdf995.com/samples/pdf.pdf', '_system', 'location=yes'); codice apertura pdf da URL
 //
         //svuoto la tabella se è già popolata prima di effettuare una nuova ricerca
-        myApp.showPreloader()
+        myApp.showPreloader();
         $$('.backToTop').addClass('nodisplay');
         $$('.tbodyDocumentList').empty();
         docTableData = [];

@@ -1,6 +1,6 @@
 
 //Causa problemi se inserito in util
-
+var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 //Services
 function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
 //    console.log('getTktDataByFilter -> Inizio elaborazione');
@@ -79,7 +79,7 @@ function getMaximoTktList(){
         // data: filters,
         async: false, //needed if you want to populate variable directly without an additional callback
         // url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/' + window.sessionStorage.username,
-        url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/maxadmin',
+        url: URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/maxadmin',
         method: 'GET',
         dataType: 'json', //compulsory to receive values as an object
         processData: true, //ignore parameters if sets to false
@@ -110,7 +110,7 @@ function getMaximoTktList(){
 function getUserAnag(){
     var ctrl = false;
     if(window.sessionStorage.jsessionid === ''){
-        myApp.alert("Sessione scaduta");
+       getLogout();
     }
     else{
 //        myApp.alert(window.sessionStorage.jsessionid);
@@ -121,7 +121,7 @@ function getUserAnag(){
                 "jSessionID": window.sessionStorage.jsessionid,
                 "cache-control": "no-cache"
             },
-            url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/anagUtente/' + window.sessionStorage.username,
+            url:  URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/userProfile/anagUtente/' + window.sessionStorage.username,
             method: 'GET',
             crossDomain: true,
             async: false,
@@ -143,6 +143,48 @@ function getUserAnag(){
     }
     return ctrl;
 }
+function getUserInfo(){
+        if(window.sessionStorage.jsessionid === ''){
+            myApp.hidePreloader();
+            getLogout();
+            
+        }else{
+             $$.ajax({
+                headers: {
+                    'Authorization': 'Bearer 102-token',
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'jSessionID': window.sessionStorage.jsessionid,
+                },
+                async: false, //needed if you want to populate variable directly without an additional callback
+                url :URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/userProfile/infoUtente',
+                method: 'GET',
+                dataType: 'json', //compulsory to receive values as an object
+                processData: true, //ignore parameters if sets to false
+                //contentType: 'application/x-www-form-urlencoded',
+                crossDomain: true,
+                    error: function (data, status, xhr) {
+
+                        //alert(JSON.stringify(data));
+                        myApp.alert('Errore reperimento Email utente');
+                        err = 'err_00';
+                        myApp.hidePreloader();
+                    },
+                    success: function (data, status, xhr) {
+                        window.sessionStorage.setItem("userEmail", data.email);
+                         
+                    },
+
+                statusCode: {
+                    401: function (xhr) {
+                        myApp.hidePreloader();
+                        myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                    }
+                }
+            });
+            
+        }
+}
 function validateUser(uuid='',upwd=''){
     var chkLogin = false;
     if(uuid=='elia4ever'){
@@ -159,7 +201,7 @@ function validateUser(uuid='',upwd=''){
             "password": upwd,
             "cache-control": "no-cache"
         },
-        url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/userProfile/login',
+        url:  URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/userProfile/login',
         method: 'GET',
         crossDomain: true,
         async: false,
@@ -245,10 +287,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
 
         if(window.sessionStorage.jsessionid === ''){
             myApp.hidePreloader();
-             myApp.alert('Clicca per effettuare il login', 'Sessione Scaduta', function () {
-                window.sessionStorage.clear();
-                myApp.loginScreen(".login-screen", false);
-        });
+            getLogout();
         }else{
             //sostituire il codice fiscale con +window.sessionStorage.codicefiscale
             $$.ajax({
@@ -273,7 +312,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                 async: false, //needed if you want to populate variable directly without an additional callback
         //        url: 'http://192.168.3.9/v2/ttm/listfilters',
         //        url: 'http://192.168.3.9/v2/docs/listfilters',
-                url :'http://portal.gabriellispa.it/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
+                url : URL_ENDPOINT+'/AFBNetWS/resourcesDocs/manageDocs/getDocumenti/',
                 method: 'GET',
                 dataType: 'json', //compulsory to receive values as an object
                 processData: true, //ignore parameters if sets to false
@@ -308,7 +347,52 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                 return docTableData;
             }
 }
+function sendDocument(keyDoc_RF, linkUrlDocumento_SP, title){
+     if(window.sessionStorage.jsessionid === ''){
+            myApp.hidePreloader();
+            getLogout();
+        }else{
+                $$.ajax({
+                      headers: {
+                          'Authorization': 'Bearer 102-token',
+                          'Access-Control-Allow-Origin': '*',
+                          'Content-type': 'application/x-www-form-urlencoded',
+                          'jSessionID': window.sessionStorage.jsessionid,
+                          'EMail' : window.sessionStorage.userEmail,
+                          'LinkUrlDocumento_SP': linkUrlDocumento_SP,
+                          'KeyDoc_RF': keyDoc_RF,
+                          'Subject': title
+                      },
+                      async: false, //needed if you want to populate variable directly without an additional callback
+                      url :URL_ENDPOINT+'/AFBNetWS/resourcesDocs/manageDocs/sendDocument',
+                      method: 'GET',
+                      dataType: 'json', //compulsory to receive values as an object
+                      processData: true, //ignore parameters if sets to false
+                      //contentType: 'application/x-www-form-urlencoded',
+                      crossDomain: true,
+                          error: function (data, status, xhr) {
+                              myApp.hidePreloader();
+                              //alert(JSON.stringify(data));
+                              myApp.alert("Errore nell'invio della mail");
+                              err = 'err_00'
+                          },
+                          success: function (data, status, xhr) {
+                                  myApp.hidePreloader();
+                                  myApp.alert('Documento inviato con successo alla email: '+window.sessionStorage.userEmail);
+                          },
+
+                      statusCode: {
+                          401: function (xhr) {
+                              myApp.hidePreloader();
+                              myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                          }
+                      }
+                  });
+              }
+};
 function getLogout(){
-    window.sessionStorage.clear();
-    myApp.loginScreen(".login-screen", false);
+    myApp.alert('Clicca per effettuare il login', 'Sessione Scaduta', function () {
+        window.sessionStorage.clear();
+        myApp.loginScreen(".login-screen", false);
+    });
 }
