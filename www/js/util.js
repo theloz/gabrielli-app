@@ -3,7 +3,8 @@
 Initial setup
  ---------------------------------------*/
 
-var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+//var URL_ENDPOINT = 'http://portal.gabriellispa.it';
+var URL_ENDPOINT = 'http://192.168.2.80:10039';
 
 //FILTER STRING
 var pageSizeFilterTickets=10;

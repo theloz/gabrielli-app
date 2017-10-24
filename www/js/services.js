@@ -66,20 +66,20 @@ function getTktDataByFilter( offset='' , limit='', filter=null, sort=null ){
     return myList;
 }
 
-function getMaximoTktList(){
+function getMaximoTktList(stringFilter){
     var err;
     var myList;
     $$.ajax({
         headers: {
             'Access-Control-Allow-Origin': '*',
             "jSessionID": window.sessionStorage.jsessionid,
-            "cache-control": "no-cache"
-    //            'dataType':'json',
+            "cache-control": "no-cache",
+            "stringFilter" : stringFilter
         },
         // data: filters,
         async: false, //needed if you want to populate variable directly without an additional callback
         // url: 'http://portal.gabriellispa.it/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/' + window.sessionStorage.username,
-        url: URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/maxadmin',
+        url: URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/elencoTicketsUtente/',
         method: 'GET',
         dataType: 'json', //compulsory to receive values as an object
         processData: true, //ignore parameters if sets to false

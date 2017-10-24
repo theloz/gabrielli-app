@@ -14,7 +14,7 @@ var $$ = Dom7;
 //Configuration for Camera
 var pictureSource;
 var destinationType;
-
+var filteredList;
 //var viewDocument;
 //Configuration for Infinite Scrolling
 var loading = false;
@@ -114,11 +114,20 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 
     //var myList = getTktDataByFilter('0','10',filter, sort);
     var myList; var lastIndexDoc; var limitDoc; var maxItems;
-    
-    myList = getMaximoTktList();
+    if(!filteredList){
+        var stringFilterOnlyUsername = 'oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.username+'"';
+        myList = getMaximoTktList(stringFilterOnlyUsername);
     // myList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
-    if(!myList)
-          return;
+
+    }else{
+        myList = filteredList;
+    }
+    if (myList && !myList.member.length > 0){
+        $$('.infinite-scroll-preloader').remove();
+        myApp.alert("Modificare la ricerca", ["Nessun ticket trovato" ]);
+        filteredList = undefined;
+        return;
+    }
     lastIndexDoc = 0;
     limitDoc = 10;
     maxItems = myList.member.length;
@@ -194,15 +203,16 @@ var filterTicket = myApp.onPageInit('filterTicket', function (page) {
         var status= $$('.filterStatusSelect').val();
         var desc = $$('.filterDescText').val();     
         var filterTicketsString = toFilterTickets(dateFrom, dateTo, status, desc);
+        filteredList = getMaximoTktList(filterTicketsString);
+        mainView.router.reloadPage("manage_ticket.html");
+        
     });
     
 });
 //DETAIL TICKET
 var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
-    $$.getJSON('http://192.168.3.9/v1/ttm/oneticket?id=' + ticketId + '', function (json) {
-        $$("#testRest").html(JSON.stringify(json));
-    });
+    myApp.alert(ticketId);
 });
 
 // DOC PAGE
