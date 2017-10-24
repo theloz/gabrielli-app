@@ -207,7 +207,7 @@ function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docC
 }
 function toFilterTickets(dateFrom, dateTo, status, desc){
     dateFrom = (dateFrom === "") ? '1970-01-01' : dateFrom;
-    dateTo = (dateTo === "") ? '2999-01-01' : dateTo;
+    dateTo = (dateTo === "") ? '2049-01-01' : dateTo;
     var descIfExist = '';
     if(desc !== ''){
        descIfExist  = 'and description="%'+desc+'%"';
