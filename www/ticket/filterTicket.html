@@ -1,0 +1,57 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link"><i class="icon f7-icons">chevron_left</i></a></div>
+        <div class="center"><div class="item-media"><img id="img-logo" src="public/img/logo.jpg" /></div></div>
+        <div class="right"><a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a></div>
+    </div>
+</div>
+
+<div class="pages">
+    <div data-page="filterTicket" class="page navbar-through">
+        <div class="page-content">
+            <div class="content-block">
+                <div class="datePickerContainer row">
+                    <div class="col-40">
+                        <span>DATA</span>
+                        <i class="f7-icons iconCalendar">calendar</i>
+                    </div>
+                    <div class="col-60">
+                        <input type="text" value="" placeholder="Dal" class="datePickerFrom" />
+                        <input type="text" value="" placeholder="Al" class="datePickerTo" />
+                    </div>
+                </div>
+                  <div class="filterStatus row">
+                     <div class="col-40">
+                         <span>STATUS</span>
+                        <i class="f7-icons iconCalendar">ticket</i>
+                    </div>
+                    <div class="col-60">
+                            <select class="filterStatusSelect">
+                                <option value="" >TUTTI GLI STATI</option>
+                                <option value="NEW">APERTO</option>
+                                <option value="QUEUED">IN CODA</option>
+                                <option value="IN PROGRESS">PRESO IN CARICO</option>
+                                <option value="PENDING">IN ATTESA</option>
+                                <option value="RESOLVED">RISOLTO</option>
+                                <option value="CLOSED">CHIUSO</option>
+                                <option value="ANNULLATO">ANNULLATO</option>
+                            </select>
+                    </div>
+                </div>
+                  <div class="filterDesc row">
+                     <div class="col-40">
+                         <span>DESCRIZIONE</span>
+                        <i class="f7-icons iconCalendar">keyboard</i>
+                    </div>
+                    <div class="col-60">
+                        <textarea class="filterDescText"></textarea>
+                    </div>
+                </div>
+                <div class="row buttonsFilter">
+                    <a href="#" id="btn-filterTicket" class="button button-fill button-big button-raised color-amber col-50">Ricerca</a>
+                    <a href="#" class="back button button-fill button-big button-raised color-red col-50 icon f7-icons">reply_fill</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

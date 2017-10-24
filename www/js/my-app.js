@@ -1,5 +1,13 @@
 // Initialize app
-var myApp = new Framework7({template7Pages: true, material: true});
+var myApp = new Framework7({
+    template7Pages: true, 
+    material: true,
+    preroute: function (view, options) {
+        if (window.sessionStorage.jsessionid === '') {
+            getLogout();
+            return false; //required to prevent default router action
+        }
+    }});
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
@@ -19,6 +27,10 @@ var itemsPerLoad = 10;
 var lastIndexDoc = 0;
 var limitDoc = 10;
 var docTableData;
+
+var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+    
 $$.ajaxSetup({headers: {'Access-Control-Allow-Origin': '*'}});
 var mainView = myApp.addView('.view-main', {dynamicNavbar: true, });
 
@@ -38,32 +50,29 @@ $$(document).on('deviceready', function () {
  ---------------------------------------*/
 //Before Init
 myApp.onPageBeforeInit('*', function (page) {
-    //Check if user is logged in retrieving user from session
-    if (typeof window.sessionStorage.authorized !== 'undefined' &&
-            window.sessionStorage.authorized !== null &&
-            window.sessionStorage.authorized !== "") {
-        myApp.closeModal(".login-screen", false);
-    } else {
-        myApp.loginScreen(".login-screen", false);
-    }
+
 });
 //Init for every page
-myApp.onPageInit("*", function () {});
+//
+myApp.onPageInit("*", function () {
+            
+});
+
 
 /*---------------------------------------
  On EACH page
  ---------------------------------------*/
-
+    
 //INDEX
 var index = myApp.onPageInit('index', function () {
-    //In caso di refresh  elimina fa auto-login
-    if (typeof window.sessionStorage.authorized !== 'undefined' &&
-            window.sessionStorage.authorized !== null &&
-            window.sessionStorage.authorized !== "") {
-        myApp.closeModal(".login-screen", false);
-    } else {
-        myApp.loginScreen(".login-screen", false);
-    }
+//    //In caso di refresh  elimina fa auto-login
+//    if (typeof window.sessionStorage.authorized !== 'undefined' &&
+//            window.sessionStorage.authorized !== null &&
+//            window.sessionStorage.authorized !== "") {
+//        myApp.closeModal(".login-screen", false);
+//    } else {
+//        myApp.loginScreen(".login-screen", false);
+//    }
 
 
     $$("#btn-logout").click(function () {
@@ -71,6 +80,7 @@ var index = myApp.onPageInit('index', function () {
         myApp.loginScreen(".login-screen", false);
     });
     $$("#btn-login").click(function () {
+                
         var formLogin = myApp.formGetData('frm-login');
         //Get Form Login
         var chkLogin;
@@ -80,10 +90,9 @@ var index = myApp.onPageInit('index', function () {
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
-            myApp.closeModal(".login-screen", false);                              //Close login screen
+            myApp.closeModal(".login-screen", false);      
             getUserAnag();
             getUserInfo();
-
         }
         else{
             myApp.alert("User name o password errati","Login error");
@@ -105,8 +114,11 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
 
     //var myList = getTktDataByFilter('0','10',filter, sort);
     var myList; var lastIndexDoc; var limitDoc; var maxItems;
+    
     myList = getMaximoTktList();
     // myList = getTktDataByFilter(lastIndex, itemsPerLoad, filter, sort);
+    if(!myList)
+          return;
     lastIndexDoc = 0;
     limitDoc = 10;
     maxItems = myList.member.length;
@@ -142,6 +154,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     });
     $$(".ticket-info").click(function () {
     });
+
 });
 
 //NEW TICKET
@@ -159,6 +172,31 @@ var new_tkt = myApp.onPageInit("new_tkt", function () {
     });
 });
 
+//FILTER TICKET
+var filterTicket = myApp.onPageInit('filterTicket', function (page) {
+    var myCalendarTicket = myApp.calendar({
+        input: '.datePickerFrom',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    var myCalendar2Ticket = myApp.calendar({
+        input: '.datePickerTo',
+        dateFormat: 'dd/mm/yyyy',
+        closeOnSelect: true,
+        monthNames: months,
+        dayNamesShort: days
+    });
+    $$('#btn-filterTicket').on('click', function () {
+        var dateFrom = formatDateFromItalian($$('.datePickerFrom').val());
+        var dateTo = formatDateFromItalian($$('.datePickerTo').val());
+        var status= $$('.filterStatusSelect').val();
+        var desc = $$('.filterDescText').val();     
+        var filterTicketsString = toFilterTickets(dateFrom, dateTo, status, desc);
+    });
+    
+});
 //DETAIL TICKET
 var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
@@ -172,8 +210,7 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
     // Prendo i parametri dalla pagina e setto il titolo e il campo hidden per il submit della form
 //    var title = page.query.pageName.replace(/_/g, ' ');
 //    var inputHiddenId = page.query.idPage;
-    var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
-    var days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+
 //    $$('.titleDocumentPage').text(title);
 //    $$('.hiddenInputId').val(inputHiddenId);
 

@@ -5,6 +5,9 @@ Initial setup
 
 var URL_ENDPOINT = 'http://portal.gabriellispa.it';
 
+//FILTER STRING
+var pageSizeFilterTickets=10;
+var orderByFilterTickets="+changedate";
 /*---------------------------------------
  Table Construction
  ---------------------------------------*/
@@ -200,6 +203,18 @@ function searchDocWithFilters(docAmountFrom, docAmountTo, dateFrom, dateTo, docC
 
 
 
+}
+function toFilterTickets(dateFrom, dateTo, status, desc){
+    dateFrom = (dateFrom === "") ? '1970-01-01' : dateFrom;
+    dateTo = (dateTo === "") ? '2999-01-01' : dateTo;
+    var descIfExist = '';
+    if(desc !== ''){
+       descIfExist  = 'and description="%'+desc+'%"';
+    }
+
+    var stringFilters = 'oslc.pageSize='+pageSizeFilterTickets+'&oslc.orderBy='+orderByFilterTickets+'&oslc.select=*&oslc.where=reportedby="'+window.sessionStorage.username+'" and changedate>="'+dateFrom+'" and changedate<="'+dateTo+'" and status="'+status+'"'+descIfExist;
+    
+    return stringFilters;
 }
 
 function formatDateFromItalian(date) {

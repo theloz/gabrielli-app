@@ -96,7 +96,7 @@ function getMaximoTktList(){
         statusCode: {
             500: function(xhr){
                 // myApp.alert('Servizio Maximo non disponibile');
-                getLogout();
+
             },
             401: function (xhr) {
                 myApp.alert('App non autorizzata ad ottenere i dati');
@@ -127,9 +127,9 @@ function getUserAnag(){
             async: false,
             success: function (data, status, xhr) {
                 data = JSON.parse(data);
-                window.sessionStorage.setItem("codcliamm", data.codcliamm);
-                window.sessionStorage.setItem("codforamm", data.codforamm);
-                window.sessionStorage.setItem("codicefiscale", data.codicefiscale);
+                window.sessionStorage.setItem("codcliamm", data.anag.member[0].codcliamm);
+                window.sessionStorage.setItem("codforamm", data.anag.member[0].codforamm);
+                window.sessionStorage.setItem("codicefiscale", data.anag.member[0].codicefiscale);
             },
             statusCode: {
                 401: function (xhr) {
@@ -313,6 +313,7 @@ function getDocumentList(docAmountFrom,docAmountTo,dateFrom,dateTo,docContains){
                 statusCode: {
                     401: function (xhr) {
                         myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                         getLogout();
                     },
                     500: function(xhr){
                         getLogout();

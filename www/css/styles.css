@@ -73,6 +73,8 @@
     border-bottom: 1px solid;
     border-radius: 0px !important;
     font-size: 15px;
+    width: 100%;
+    max-width: 160px;
 }
 .iconCalendar{
     vertical-align: middle;
@@ -81,7 +83,7 @@
     display: block;
     text-align: left;
 }
-.datePickerContainer, .searchForNumberContainer{
+.datePickerContainer, .searchForNumberContainer, .filterStatus, .filterDesc{
     padding: 0px 5px;
     margin-bottom: 20px;
 }
@@ -104,7 +106,9 @@
 .backToTop{
        background: #ffc107!important;
 }
-
+.buttonsFilter{
+    margin-top: 50px;
+}
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;
