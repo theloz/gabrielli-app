@@ -87,7 +87,7 @@ function getMaximoTktList(stringFilter){
         crossDomain: true,
             error: function (data, status, xhr) {
                 //alert(JSON.stringify(data));
-                // myApp.alert('Nessun dato da caricare');
+                myApp.alert('Errore caricamento ticket');
                 err = 'err_00'
             },
             success: function (data, status, xhr) {
@@ -361,6 +361,53 @@ function sendDocument(keyDoc_RF, linkUrlDocumento_SP, title){
                           401: function (xhr) {
                               myApp.hidePreloader();
                               myApp.alert('App non autorizzata ad ottenere i dati', 'docListError');
+                          }
+                      }
+                  });
+              }
+};
+function sendEval(valutazioneTempistica, valutazioneSoluzione, valutazioneCortesia, notaValutazione, hrefTicket){
+     if(window.sessionStorage.jsessionid === ''){
+            myApp.hidePreloader();
+            getLogout();
+        }else{
+            var obj = new Object();
+            obj.livello_tempistica = valutazioneTempistica;
+            obj.livello_soluzione  = valutazioneSoluzione;
+            obj.livello_cordialita = valutazioneCortesia;
+            obj.noteval = notaValutazione;
+            var evaluation= JSON.stringify(obj);
+            
+                $$.ajax({
+                      headers: {
+                          'Authorization': 'Bearer 102-token',
+                          'Access-Control-Allow-Origin': '*',
+                          'jSessionID': window.sessionStorage.jsessionid,
+                          'hrefTicket': hrefTicket
+                      },
+                      data: evaluation,
+                      async: false, //needed if you want to populate variable directly without an additional callback
+                      url :URL_ENDPOINT+'/AFBNetWS/resourcesMaximo/manageTicket/valutaTicket',
+                      method: 'POST',
+                      //dataType: 'json', remove if a post request
+                      processData: true, //ignore parameters if sets to false
+                      contentType: 'application/json',
+                      crossDomain: true,
+                          error: function (data, status, xhr) {
+                              myApp.hidePreloader();
+                              //alert(JSON.stringify(data));
+                              myApp.alert("Errore nell'invio della valutazione");
+                              err = 'err_00'
+                          },
+                          success: function (data, status, xhr) {
+                                  myApp.hidePreloader();
+                                  myApp.alert('Valutazione inviata con successo ');
+                          },
+
+                      statusCode: {
+                          401: function (xhr) {
+                              myApp.hidePreloader();
+                              myApp.alert('App non autorizzata ad inviare i dati');
                           }
                       }
                   });

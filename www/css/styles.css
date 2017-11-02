@@ -109,6 +109,45 @@
 .buttonsFilter{
     margin-top: 50px;
 }
+.valutazioneTkt input[type="radio"] {
+  display: none;
+}
+
+.valutazioneTkt label {
+  font-size:30px; 
+}
+
+.valutazioneTkt label{
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+.textAreaValutazioneTkt{
+    direction: ltr;
+}
+.valutazioneTkt label:hover,
+.valutazioneTkt label:hover ~ label {
+  color: orange;
+}
+
+.valutazioneTkt input[type="radio"]:checked ~ label {
+  color: orange;
+}
+.valutazioneTkt{
+        padding-left: 16px;
+    
+}
+.btnDetailTicket{
+    margin-top: 50px;
+}
+
+.displaynone{
+    display: none;
+}
+
+.notaValutazione{
+    padding-right: 16px;    
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
     .tbodyDocumentList td{
         padding-top: 5px;

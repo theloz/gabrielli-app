@@ -130,6 +130,9 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     }
     lastIndexDoc = 0;
     limitDoc = 10;
+    if(!myList){
+        return;
+    }
     maxItems = myList.member.length;
     var cols = ["ticketid", "externalsystem", "description", "status", "createdby", "affectedperson", "creationdate"];
     var heads = ["ID Ticket", "Tipo segnalazione", "Descrizione", "Stato", "Aperto Da", "Assegnato A", "Data creazione"];
@@ -212,7 +215,19 @@ var filterTicket = myApp.onPageInit('filterTicket', function (page) {
 //DETAIL TICKET
 var ticketPage = myApp.onPageInit('ticketPage', function (page) {
     var ticketId = page.query.id;
-    myApp.alert(ticketId);
+    var stringFilter = 'oslc.select=*&oslc.where=ticketid="'+ticketId+'"';
+    var ticket = getMaximoTktList(stringFilter);
+    if(!ticket){
+        myApp.alert("Dettagli del ticket "+ticketId+" non disponibili");
+        return;
+    }
+    populateTicketPageDetails(ticket.member[0]);
+    
+    $$('#btn-valuta-ticket').on('click', function () {
+        myApp.showPreloader();
+        prepareEval();
+    });
+    
 });
 
 // DOC PAGE

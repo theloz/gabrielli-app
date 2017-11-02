@@ -4,7 +4,7 @@ Initial setup
  ---------------------------------------*/
 
 //var URL_ENDPOINT = 'http://portal.gabriellispa.it';
-var URL_ENDPOINT = 'http://192.168.2.80:10039';
+var URL_ENDPOINT = 'http://192.168.2.83:10039';
 
 //FILTER STRING
 var pageSizeFilterTickets=10;
@@ -25,7 +25,7 @@ function buildHtmlTableBody(myList, columns) {
             if (cellValue === null) {
                 cellValue = "";
             }
-            row$.append($$('<td data-collapsible-title="' + [columns[colIndex]] + '"/>').html('<a href="ticketPage.html?id=' + myList[i][columns[0]] + '" class="ticket-info">' + cellValue + '</a>'));
+            row$.append($$('<td data-collapsible-title="' + [columns[colIndex]] + '"/>').html('<a href="ticket/ticketPage.html?id=' + myList[i][columns[0]] + '" class="ticket-info">' + cellValue + '</a>'));
         }
         $$(".data-table > table > tbody").append(row$);
     }
@@ -176,7 +176,7 @@ function buildTicketTable(myList, columns, headers, limit, lastIndexDoc) {
     console.log('index: '+lastIndexDoc+' limit: '+limit + ' count: ' + myList.length + ' upperLimit: ' + upperLimit);
     for (var i = lastIndexDoc; i < upperLimit && i < myList.length; i++) {
         var row$ = $$('<tr/>');
-        url = "ticketPage.html?id=" + myList[i].ticketid;
+        url = "ticket/ticketPage.html?id=" + myList[i].ticketid;
         row$.append($$('<td data-collapsible-title="' + headers[0] + '"/>').html('<a href="'+ url +'" class="doc-info_number">' + myList[i].ticketid + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[1] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].externalsystem + '</a>'));
         row$.append($$('<td data-collapsible-title="' + headers[2] + '"/>').html('<a href="'+ url +'" class="doc-info_title">' + myList[i].description + '</a>'));
@@ -237,4 +237,46 @@ function formatDateFromTimeStampToItalian(timeStamp) {
     }
     return finalDate;
 
+}
+function populateTicketPageDetails(ticket){
+    $$(".hrefTicketId").val(ticket.href);
+    $$(".textAreaRichiestaTkt").val(ticket.description ? ticket.description : "Non disponibile");
+    $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription : "Non disponibile");
+    $$(".statusTkt input").val(ticket.status ? ticket.status : "Non disponibile");
+    $$(".operatoreTkt input").val(ticket.assignment1 ? ticket.assignment1 : "Non disponibile");
+    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription  : "Non disponibile");
+    
+
+    /*  ---------IMPORTANTE--------
+     * 
+     *  togliere il "&& false" dall'if usato in fase di TEST
+     * 
+     */
+    if(ticket.status !== 'RESOLVED' || ticket.status !== 'CLOSED' && false){
+        $$(".soluzioneTicket").hide();
+    }
+    
+    if(ticket.status !== 'RESOLVED' && false){
+        $$(".valutazioneTkt").hide();
+        $$("#btn-valuta-ticket").hide();
+    }
+}
+
+function prepareEval(){
+    var hrefTicket = $$(".hrefTicketId").val();
+    var valutazioneTempistica = parseInt($$('input[name=tempistica]:checked').val());
+    var valutazioneSoluzione = parseInt($$('input[name=soluzione]:checked').val());
+    var valutazioneCortesia = parseInt($$('input[name=cortesia]:checked').val());
+    if((valutazioneCortesia < 3 || valutazioneSoluzione < 3 || valutazioneTempistica < 3) && $$(".notaValutazione textarea").val() === ''){   
+        myApp.alert("Inserisci una nota di valutazione");
+        $$(".notaValutazione").css("display","block");
+        myApp.hidePreloader();
+        return;
+    }else{
+        var notaValutazione= $$(".notaValutazione textarea").val()
+        sendEval(valutazioneTempistica, valutazioneSoluzione, valutazioneCortesia, notaValutazione, hrefTicket);
+    }
+    
+    
+    
 }
