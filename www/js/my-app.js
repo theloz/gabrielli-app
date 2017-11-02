@@ -107,8 +107,8 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     var ptrContent = $$('.pull-to-refresh-content');
     ptrContent.on('ptr:refresh', function (e) {
         setTimeout(function () {
-            manage_ticket.trigger();
             myApp.pullToRefreshDone();
+            mainView.router.reloadPage("manage_ticket.html");
         }, 1000);
     });
 
