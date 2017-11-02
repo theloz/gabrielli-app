@@ -107,8 +107,8 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     var ptrContent = $$('.pull-to-refresh-content');
     ptrContent.on('ptr:refresh', function (e) {
         setTimeout(function () {
-            myApp.pullToRefreshDone();
             manage_ticket.trigger();
+            myApp.pullToRefreshDone();
         }, 1000);
     });
 
@@ -124,7 +124,11 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     }
     if (myList && !myList.member.length > 0){
         $$('.infinite-scroll-preloader').remove();
-        myApp.alert("Modificare la ricerca", ["Nessun ticket trovato" ]);
+        if(!filteredList){
+            myApp.alert("Nessun ticket trovato per l'utente <b>"+window.sessionStorage.username+"</b>", ["Nessun ticket trovato" ]);
+        }else{
+            myApp.alert("Modificare la ricerca", ["Nessun ticket trovato" ]);
+        }
         filteredList = undefined;
         return;
     }
