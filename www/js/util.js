@@ -244,13 +244,15 @@ function populateTicketPageDetails(ticket){
     $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription : "Non disponibile");
     $$(".statusTkt input").val(ticket.status ? ticket.status : "Non disponibile");
     $$(".operatoreTkt input").val(ticket.assignment1 ? ticket.assignment1 : "Non disponibile");
-    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription  : "Non disponibile");
+    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription  : "Dettaglio risoluzione non disponibile");
     
 
-    /*  ---------IMPORTANTE--------
+    /*  
+     * ---------IMPORTANTE--------
      * 
      *  togliere il "&& false" dall'if usato in fase di TEST
      * 
+     * ---------IMPORTANTE--------
      */
     if(ticket.status !== 'RESOLVED' || ticket.status !== 'CLOSED' && false){
         $$(".soluzioneTicket").hide();
@@ -273,10 +275,19 @@ function prepareEval(){
         myApp.hidePreloader();
         return;
     }else{
-        var notaValutazione= $$(".notaValutazione textarea").val()
+        var notaValutazione= $$(".notaValutazione textarea").val();
         sendEval(valutazioneTempistica, valutazioneSoluzione, valutazioneCortesia, notaValutazione, hrefTicket);
     }
-    
-    
-    
+}
+
+function blockAfterEval(){
+        $$(".valutazioneTkt input").prop({
+            disabled: true,
+            readonly: true
+        });
+        $$(".notaValutazione textarea").prop({
+          disabled: true,
+          readonly: true
+        });
+        $$("#btn-valuta-ticket").hide();
 }

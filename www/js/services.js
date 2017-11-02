@@ -402,6 +402,7 @@ function sendEval(valutazioneTempistica, valutazioneSoluzione, valutazioneCortes
                           success: function (data, status, xhr) {
                                   myApp.hidePreloader();
                                   myApp.alert('Valutazione inviata con successo ');
+                                  blockAfterEval();
                           },
 
                       statusCode: {
