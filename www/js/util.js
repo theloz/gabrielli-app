@@ -240,11 +240,11 @@ function formatDateFromTimeStampToItalian(timeStamp) {
 }
 function populateTicketPageDetails(ticket){
     $$(".hrefTicketId").val(ticket.href);
-    $$(".textAreaRichiestaTkt").val(ticket.description ? ticket.description : "Non disponibile");
-    $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription : "Dettaglio ticket non disponibile");
+    $$(".textAreaRichiestaTkt").val(ticket.description ? ticket.description.replace(/<(?:.|\n)*?>/gm, '') : "Non disponibile");
+    $$(".textAreaDettagliTkt").val(ticket.description_longdescription ? ticket.description_longdescription.replace(/<(?:.|\n)*?>/gm, '') : "Dettaglio ticket non disponibile");
     $$(".statusTkt input").val(ticket.status ? ticket.status : "Status non disponibile");
     $$(".operatoreTkt input").val(ticket.assignment1 ? ticket.assignment1 : "Operatore non disponibile");
-    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription  : "Dettaglio risoluzione non disponibile");
+    $$(".textAreaSoluzioneTkt").val(ticket.fr2code_longdescription  ? ticket.fr2code_longdescription.replace(/<(?:.|\n)*?>/gm, '')  : "Dettaglio risoluzione non disponibile");
     
 
     /*  
@@ -254,7 +254,7 @@ function populateTicketPageDetails(ticket){
      * 
      * ---------IMPORTANTE--------
      */
-    if(ticket.status !== 'RESOLVED' || ticket.status !== 'CLOSED' && false){
+    if((ticket.status !== 'RESOLVED' || ticket.status !== 'CLOSED') && false){
         $$(".soluzioneTicket").hide();
     }
     
