@@ -141,7 +141,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
     lastIndexDoc = lastIndexDoc + limitDoc;
 
     // lastIndex = itemsPerLoad + 1;
-
+ 
     $$('.infinite-scroll').on('infinite', function () {
         // Exit, if loading in progress
         if (loading)
@@ -164,9 +164,7 @@ var manage_ticket = myApp.onPageInit('manage_ticket', function (page) {
             lastIndexDoc = lastIndexDoc + limitDoc;
         }, 500);
     });
-    $$(".ticket-info").click(function () {
-    });
-
+    
 });
 
 //NEW TICKET
@@ -309,7 +307,7 @@ var doc_page = myApp.onPageInit('doc_page', function (page) {
         docAmountTo = (docAmountTo === "") ? '99999999' : docAmountTo;
         docContains = (docContains === "") ? 'ALL' : docContains;
         dateFrom = (dateFrom === "") ? '1970-01-01' : dateFrom;
-        dateTo = (dateTo === "") ? '2999-01-01' : dateTo;
+        dateTo = (dateTo === "") ? '2049-01-01' : dateTo;
 
         lastIndexDoc = 0;
         limitDoc = 10;

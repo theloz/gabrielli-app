@@ -270,7 +270,7 @@ function prepareEval(){
     var valutazioneSoluzione = parseInt($$('input[name=soluzione]:checked').val());
     var valutazioneCortesia = parseInt($$('input[name=cortesia]:checked').val());
     if((valutazioneCortesia < 3 || valutazioneSoluzione < 3 || valutazioneTempistica < 3) && $$(".notaValutazione textarea").val() === ''){   
-        myApp.alert("Inserisci una nota di valutazione");
+        myApp.alert("Inserisci una nota di valutazione","Nota Valutazione");
         $$(".notaValutazione").css("display","block");
         myApp.hidePreloader();
         return;
