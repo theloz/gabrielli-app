@@ -90,7 +90,7 @@ var index = myApp.onPageInit('index', function () {
             window.sessionStorage.setItem("username", formLogin.username);  //Set user in session
             window.sessionStorage.setItem("authorized", 1);                 //Set token auth
             $$("#box-welcome").html("Benvenuto " + window.sessionStorage.username);
-            myApp.closeModal(".login-screen", false);      
+            myApp.closeModal(".login-screen", false);
             getUserAnag();
             getUserInfo();
         }
